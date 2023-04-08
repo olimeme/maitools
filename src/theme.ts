@@ -1,12 +1,31 @@
-import { extendTheme, type ThemeConfig } from "@chakra-ui/react";
-
-const config: ThemeConfig = {
-  initialColorMode: "dark",
-  useSystemColorMode: false,
-};
+import { extendTheme, StyleFunctionProps } from "@chakra-ui/react";
+import {
+  DARK_MODE_BODY_BG_COLOR,
+  LIGHT_MODE_BODY_BG_COLOR,
+} from "./themes/colors";
+import { menuTheme } from "./themes/menu";
 
 const theme = extendTheme({
-  config,
+  styles: {
+    global: (props: StyleFunctionProps) => ({
+      body: {
+        bg:
+          props.colorMode === "light"
+            ? LIGHT_MODE_BODY_BG_COLOR
+            : DARK_MODE_BODY_BG_COLOR,
+        transitionProperty: "all",
+        transitionDuration: "normal",
+      },
+    }),
+  },
+  config: {
+    disableTransitionOnChange: false,
+    initialColorMode: "dark",
+    useSystemColorMode: false,
+  },
+  components: {
+    Menu: menuTheme,
+  },
 });
 
 export default theme;
