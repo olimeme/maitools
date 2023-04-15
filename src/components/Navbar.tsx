@@ -8,15 +8,16 @@ import {
   MenuList,
   Spacer,
 } from "@chakra-ui/react";
-import React from "react";
 import DarkModeSwitch from "./DarkModeSwitch";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-
+import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <Flex>
       <Box p="4">
-        <Button variant="ghost">mintools</Button>
+        <Link to={"/"}>
+          <Button variant="ghost">mintools</Button>
+        </Link>
       </Box>
       <Spacer />
       <Box p="4">
@@ -29,10 +30,20 @@ const Navbar = () => {
             tools
           </MenuButton>
           <MenuList>
-            <MenuItem>Markdown</MenuItem>
-            <MenuItem>Pomodoro Timer</MenuItem>
-            <MenuItem>Whiteboard</MenuItem>
-            <MenuItem>Todo list</MenuItem>
+            <Link to={"/markdown"}>
+              <MenuItem>Markdown</MenuItem>
+            </Link>
+            <Link to={"/pomodoro-timer"}>
+              <MenuItem>Pomodoro Timer</MenuItem>
+            </Link>
+
+            <Link to={"/whiteboard"}>
+              <MenuItem>Whiteboard</MenuItem>
+            </Link>
+
+            <Link to={"/todo-list"}>
+              <MenuItem>Todo List</MenuItem>
+            </Link>
           </MenuList>
         </Menu>
         <DarkModeSwitch />
