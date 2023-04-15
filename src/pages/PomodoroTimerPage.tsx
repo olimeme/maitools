@@ -1,7 +1,8 @@
 import React from "react";
+import MotionWrapper from "../components/MotionWrapper";
 
 const PomodoroTimerPage = () => {
-  return <div>PomodoroTimerPage</div>;
+  return <MotionWrapper>PomodoroTimerPage</MotionWrapper>;
 };
 
 export default PomodoroTimerPage;
