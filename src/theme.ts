@@ -4,6 +4,7 @@ import {
   LIGHT_MODE_BODY_BG_COLOR,
 } from "./themes/colors";
 import { menuTheme } from "./themes/menu";
+import { cardTheme } from "./themes/card";
 
 const theme = extendTheme({
   styles: {
@@ -25,6 +26,7 @@ const theme = extendTheme({
   },
   components: {
     Menu: menuTheme,
+    Card: cardTheme,
   },
 });
 

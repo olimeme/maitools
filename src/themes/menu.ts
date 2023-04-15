@@ -1,4 +1,3 @@
-import { menuAnatomy } from "@chakra-ui/anatomy";
 import { StyleFunctionProps } from "@chakra-ui/react";
 import {
   DARK_MODE_MENU_BG_COLOR,

@@ -16,7 +16,7 @@ const Navbar = () => {
     <Flex>
       <Box p="4">
         <Link to={"/"}>
-          <Button variant="ghost">mintools</Button>
+          <Button variant="ghost">maitools</Button>
         </Link>
       </Box>
       <Spacer />

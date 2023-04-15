@@ -6,3 +6,6 @@ export const LIGHT_MODE_MENU_BG_COLOR = "white";
 
 export const DARK_MODE_MENU_ITEM_HOVER_COLOR = "whiteAlpha.200";
 export const LIGHT_MODE_MENU_ITEM_HOVER_COLOR = "blackAlpha.200";
+
+export const DARK_MODE_CARD_BG_COLOR = "whiteAlpha.50";
+export const LIGHT_MODE_CARD_BG_COLOR = "whiteAlpha.50";
