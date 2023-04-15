@@ -4,8 +4,7 @@ import {
   public_route_group,
   public_route_group_without_navbar,
 } from "./routes/publicRoutes";
-import WithoutNavbarRoutes from "./routes/withoutNavbarRoutes";
-import WithNavbarRoutes from "./routes/withNavbarRoutes";
+import WithNavbarRoutes from "./routes/WithNavbarRoutes";
 
 function App() {
   return (
