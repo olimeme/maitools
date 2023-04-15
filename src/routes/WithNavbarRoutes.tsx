@@ -2,7 +2,7 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import { Outlet } from "react-router";
 
-const WithNavbarRoutes = () => {
+const withNavbarRoutes = () => {
   return (
     <>
       <Navbar />
@@ -11,4 +11,4 @@ const WithNavbarRoutes = () => {
   );
 };
 
-export default WithNavbarRoutes;
+export default withNavbarRoutes;
