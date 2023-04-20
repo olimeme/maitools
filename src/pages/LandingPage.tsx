@@ -9,6 +9,7 @@ import {
   Container,
   Flex,
   Heading,
+  Stack,
   Text,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
@@ -21,7 +22,7 @@ const LandingPage = () => {
   const cardItems: CardItem[] = [
     {
       heading: "Markdown",
-      desc: "Write down your thoughts and stuff",
+      desc: "Write stuff... like a programmer.",
       link: "/markdown",
     },
     {
@@ -49,9 +50,16 @@ const LandingPage = () => {
   return (
     <MotionWrapper>
       <Container maxW="6xl">
-        <Center mt={"24"}>
-          <Heading size={"2xl"}>maitools</Heading>
-        </Center>
+        <Stack>
+          <Center mt={"24"}>
+            <Heading size={"3xl"}>maitools</Heading>
+          </Center>
+          <Center mt={"24"}>
+            <Heading size={"md"} color={"gray"}>
+              all essential academic productivity tools
+            </Heading>
+          </Center>
+        </Stack>
         <Flex
           justify={"center"}
           alignItems="stretch"
