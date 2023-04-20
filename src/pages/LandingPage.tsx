@@ -13,6 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import MotionWrapper from "../components/MotionWrapper";
+import "@fontsource/quicksand/700.css";
+
 type CardItem = { heading: string; desc: string; link: string };
 
 const LandingPage = () => {

@@ -19,6 +19,9 @@ const theme = extendTheme({
       },
     }),
   },
+  fonts: {
+    heading: `'Quicksand', sans-serif`,
+  },
   config: {
     disableTransitionOnChange: false,
     initialColorMode: "dark",
