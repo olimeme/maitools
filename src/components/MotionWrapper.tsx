@@ -1,3 +1,4 @@
+import { Box } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 const MotionWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -7,7 +8,7 @@ const MotionWrapper = ({ children }: { children: React.ReactNode }) => {
       transition={{ duration: 0.15 }}
       exit={{ opacity: 0, y: 10 }}
     >
-      {children}
+      <Box p={4}>{children}</Box>
     </motion.div>
   );
 };
