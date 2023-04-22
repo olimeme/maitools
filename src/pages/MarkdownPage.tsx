@@ -34,7 +34,9 @@ const MarkdownPage = () => {
 
   return (
     <MotionWrapper>
-      <Heading mb={8}>Markdown</Heading>
+      <Heading mb={8} textAlign={"center"}>
+        Markdown
+      </Heading>
       <Flex>
         <Box flex={1}>
           <Textarea
