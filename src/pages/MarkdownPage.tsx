@@ -1,29 +1,14 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import MotionWrapper from "../components/MotionWrapper";
-import ChakraUIRenderer from "chakra-ui-markdown-renderer";
-import {
-  Box,
-  Center,
-  Divider,
-  Flex,
-  Heading,
-  Input,
-  Textarea,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Textarea } from "@chakra-ui/react";
 import { useState } from "react";
+import ChakraUIRenderer from "../helpers/chakraUIRenderer";
+import rehypeRaw from "rehype-raw";
+import rehypeHighlight from "rehype-highlight";
 
 const MarkdownPage = () => {
-  const [markdownValue, setMarkdownValue] = useState(
-    `# Write down any markdown text here... 
-- Add some notes
-- like
-- this
-- ~strikethrough~
-
-#### or [links](https://github.com/olimeme/maitools)
-    `
-  );
+  const [markdownValue, setMarkdownValue] = useState("");
 
   const handleInputChange:
     | React.ChangeEventHandler<HTMLTextAreaElement>
@@ -51,9 +36,9 @@ const MarkdownPage = () => {
         <Box flex={1} px={8}>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw, rehypeHighlight]}
             components={ChakraUIRenderer()}
             children={markdownValue}
-            skipHtml
           />
         </Box>
       </Flex>
