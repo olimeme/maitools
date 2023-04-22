@@ -1,25 +1,22 @@
-import ReactMarkdown, { Components } from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { useEffect, useState } from "react";
 import MotionWrapper from "../components/MotionWrapper";
-import {
-  Box,
-  Code,
-  Flex,
-  Heading,
-  Text,
-  Textarea,
-  useColorMode,
-} from "@chakra-ui/react";
-import { useState } from "react";
-import ChakraUIRenderer from "../helpers/chakraUIRenderer";
-import rehypeRaw from "rehype-raw";
-import rehypeHighlight from "rehype-highlight";
-import rehypeSanitize from "rehype-sanitize";
-import { ReactMarkdownProps } from "react-markdown/lib/complex-types";
+import { Box, Flex, Heading, Textarea } from "@chakra-ui/react";
+import MarkdownRenderer from "../components/MarkdownRenderer";
+import { markdownPageInitialValue } from "../helpers/markdownPageInitialValue";
+import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
 
 const MarkdownPage = () => {
-  const [markdownValue, setMarkdownValue] = useState("");
-  const { colorMode, toggleColorMode } = useColorMode();
+  const [markdownValue, setMarkdownValue] = useState(
+    () =>
+      getInitialStateFromLocalStorage(
+        "markdownValue",
+        markdownPageInitialValue
+      ) as string
+  );
+
+  useEffect(() => {
+    localStorage.setItem("markdownValue", JSON.stringify(markdownValue));
+  }, [markdownValue]);
 
   const handleInputChange:
     | React.ChangeEventHandler<HTMLTextAreaElement>
@@ -28,40 +25,15 @@ const MarkdownPage = () => {
     setMarkdownValue(inputValue);
   };
 
-  const codeChakraUIElementRenderer: Components = {
-    code: ({ inline, children, className }) => {
-      if (inline) {
-        return (
-          <Text
-            as="kbd"
-            children={children}
-            bgColor={colorMode === "light" ? "gray.300" : "whiteAlpha.300"}
-            color={colorMode === "light" ? "gray.900" : "whiteAlpha.900"}
-          />
-        );
-      }
-
-      return (
-        <Code
-          className={className}
-          whiteSpace="break-spaces"
-          display="block"
-          w="full"
-          children={children}
-        />
-      );
-    },
-  };
-
   return (
     <MotionWrapper>
       <Heading mb={8} textAlign={"center"}>
         Markdown
       </Heading>
-      <Flex>
+      <Flex wrap={"wrap"}>
         <Box flex={1}>
           <Textarea
-            minHeight={"100vh"}
+            minHeight={"2xl"}
             variant={"filled"}
             value={markdownValue}
             onChange={handleInputChange}
@@ -70,12 +42,7 @@ const MarkdownPage = () => {
           />
         </Box>
         <Box flex={1} px={8}>
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSanitize]}
-            components={ChakraUIRenderer(codeChakraUIElementRenderer)}
-            children={markdownValue}
-          />
+          <MarkdownRenderer markdownValue={markdownValue} />
         </Box>
       </Flex>
     </MotionWrapper>
