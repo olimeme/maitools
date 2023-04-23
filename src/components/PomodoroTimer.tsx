@@ -1,13 +1,15 @@
 import {
   Box,
   Button,
+  Center,
   CircularProgress,
   CircularProgressLabel,
   HStack,
+  Heading,
   Text,
   VStack,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
 
 interface PomodoroTimerProps {
@@ -28,6 +30,10 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
   );
   const [isActive, setIsActive] = useState<boolean>(
     () => getInitialStateFromLocalStorage("isActive", false) as boolean
+  );
+  const timePassed = useMemo(
+    () => workTime * 60 - timeRemaining,
+    [timeRemaining]
   );
 
   useEffect(() => {
@@ -77,28 +83,20 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
 
   return (
     <Box>
-      <Text fontSize="2xl">{isWorking ? "Work Time" : "Break Time"}</Text>
-      <Box>
-        <CircularProgress
-          value={
-            100 -
-            (timeRemaining / (isWorking ? workTime : breakTime) / 60) * 100
-          }
-          size="120px"
-          thickness="10px"
-          capIsRound
-        >
-          <CircularProgressLabel>
-            {displayTime(timeRemaining)}
-          </CircularProgressLabel>
-        </CircularProgress>
-      </Box>
-      <HStack mt={8}>
-        <Button onClick={toggleActive}>{isActive ? "Pause" : "Start"}</Button>
-        <Button onClick={resetTimer} variant={"ghost"}>
-          Reset
-        </Button>
-      </HStack>
+      <Heading as={"h1"} size={"4xl"} textAlign={"center"}>
+        {displayTime(timeRemaining)}
+      </Heading>
+      {/* <Text>Time passed: {timePassed}</Text> */}
+      <Center>
+        <HStack mt={8}>
+          <Button size={"lg"} onClick={toggleActive}>
+            {isActive ? "Pause" : "Start"}
+          </Button>
+          <Button size={"lg"} onClick={resetTimer} variant={"ghost"}>
+            Reset
+          </Button>
+        </HStack>
+      </Center>
     </Box>
   );
 };
