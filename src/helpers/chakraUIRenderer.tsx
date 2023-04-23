@@ -19,6 +19,7 @@ import {
   DARK_MODE_CODE_BG_COLOR,
   LIGHT_MODE_CODE_BG_COLOR,
 } from "../themes/colors";
+import { Button } from "@chakra-ui/react";
 
 type GetCoreProps = {
   children?: React.ReactNode;
@@ -29,6 +30,16 @@ function getCoreProps(props: GetCoreProps): any {
   return props["data-sourcepos"]
     ? { "data-sourcepos": props["data-sourcepos"] }
     : {};
+}
+
+function convertTextToHeadingId(text: string) {
+  let filteredString = text.split(" ").join("-").toLowerCase();
+  let forbiddenChars = ["/", "?", "&", "=", ".", '"', "'", ")", "("];
+
+  for (let char of forbiddenChars) {
+    filteredString = filteredString.split(char).join("");
+  }
+  return filteredString;
 }
 
 interface Defaults extends Components {
@@ -90,7 +101,7 @@ export const defaults: Defaults = {
   img: Image,
   text: (props) => {
     const { children } = props;
-    return <Text as="span">{children}</Text>;
+    return <Link href={`#${children}`}>{children}</Link>;
   },
   ul: (props) => {
     const { ordered, children, depth } = props;
@@ -158,15 +169,20 @@ export const defaults: Defaults = {
   heading: (props) => {
     const { level, children } = props;
     const sizes = ["2xl", "xl", "lg", "md", "sm", "xs"];
+    console.log(children);
     return (
-      <Heading
-        my={4}
-        as={`h${level}`}
-        size={sizes[`${level - 1}`]}
-        {...getCoreProps(props)}
-      >
-        {children}
-      </Heading>
+      <>
+        <Heading
+          my={4}
+          id={`${convertTextToHeadingId(children.toString())}`}
+          as={`h${level}`}
+          size={sizes[`${level - 1}`]}
+          {...getCoreProps(props)}
+        >
+          {children}
+        </Heading>
+        <Divider mb={4} />
+      </>
     );
   },
   pre: (props) => {
