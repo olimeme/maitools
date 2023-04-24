@@ -2,17 +2,15 @@ import {
   Box,
   Button,
   Center,
-  CircularProgress,
-  CircularProgressLabel,
   HStack,
   Heading,
-  Text,
-  VStack,
+  IconButton,
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
-
+import { FaUndo } from "react-icons/fa";
+import { HiPause, HiPlay } from "react-icons/hi2";
 interface PomodoroTimerProps {
   workTime: number;
   breakTime: number;
@@ -116,13 +114,21 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
         {displayTime(timeRemaining)}
       </Heading>
       <Center>
-        <HStack mt={8}>
-          <Button size={"lg"} onClick={pauseTimer}>
+        <HStack mt={8} spacing={"6"}>
+          <Button
+            size={"lg"}
+            onClick={pauseTimer}
+            rightIcon={isActive ? <HiPause /> : <HiPlay />}
+          >
             {isActive ? "Pause" : "Start"}
           </Button>
-          <Button size={"lg"} onClick={resetTimer} variant={"ghost"}>
-            Reset
-          </Button>
+          <IconButton
+            size={"lg"}
+            aria-label="retry"
+            icon={<FaUndo />}
+            variant={"ghost"}
+            onClick={resetTimer}
+          />
         </HStack>
       </Center>
     </Box>
