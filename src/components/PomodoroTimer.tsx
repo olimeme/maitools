@@ -36,7 +36,6 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
   const timePassed = useRef(
     getInitialStateFromLocalStorage("passedTime", 0) as number
   );
-
   useEffect(() => {
     if (!isActive) return;
 
