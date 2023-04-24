@@ -6,6 +6,7 @@ import {
 import { menuTheme } from "./themes/menu";
 import { cardTheme } from "./themes/card";
 import { linkTheme } from "./themes/link";
+import { modalTheme } from "./themes/modal";
 
 const theme = extendTheme({
   styles: {
@@ -33,6 +34,7 @@ const theme = extendTheme({
     Menu: menuTheme,
     Card: cardTheme,
     Link: linkTheme,
+    Modal: modalTheme,
   },
 });
 
