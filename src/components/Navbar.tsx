@@ -11,7 +11,17 @@ import {
 import DarkModeSwitch from "./DarkModeSwitch";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
+import CondencedPomodoroTimer from "./CondencedPomodoroTimer";
 const Navbar = () => {
+  const [currentTimeForPomodoro, setCurrentTimeForPomodoro] = useState<number>(
+    () => getInitialStateFromLocalStorage("timeRemaining", 25 * 60) as number
+  );
+
+  console.log(
+    getInitialStateFromLocalStorage("timeRemaining", 25 * 60) as number
+  );
   return (
     <Flex>
       <Box p="4">
@@ -20,6 +30,11 @@ const Navbar = () => {
         </Link>
       </Box>
       <Spacer />
+      <Box p="6">
+        <Link to={"/pomodoro-timer"}>
+          <CondencedPomodoroTimer currentTime={currentTimeForPomodoro} />
+        </Link>
+      </Box>
       <Box p="4">
         <Menu>
           <MenuButton
