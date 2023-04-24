@@ -5,22 +5,24 @@ import {
   HStack,
   Heading,
   IconButton,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
 import { FaUndo } from "react-icons/fa";
-import { HiPause, HiPlay } from "react-icons/hi2";
-interface PomodoroTimerProps {
-  workTime: number;
-  breakTime: number;
-}
+import { HiPause, HiPlay, HiCog6Tooth } from "react-icons/hi2";
+import PomodoroSerttingsModal from "./PomodoroSerttingsModal";
 
-const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
-  workTime,
-  breakTime,
-}) => {
+const PomodoroTimer = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const [workTime, setWorkTime] = useState<number>(
+    () => getInitialStateFromLocalStorage("workTime", 25) as number
+  );
+  const [breakTime, setBreakTime] = useState<number>(
+    () => getInitialStateFromLocalStorage("breakTime", 5) as number
+  );
   const [timeRemaining, setTimeRemaining] = useState<number>(
     () =>
       getInitialStateFromLocalStorage("timeRemaining", workTime * 60) as number
@@ -34,6 +36,7 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
   const timePassed = useRef(
     getInitialStateFromLocalStorage("passedTime", 0) as number
   );
+
   useEffect(() => {
     if (!isActive) return;
 
@@ -83,6 +86,14 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
     localStorage.setItem("isActive", JSON.stringify(isActive));
   }, [timeRemaining, isWorking, isActive]);
 
+  const handleChangeWorkTime = (timeInMinutes: number) => {
+    setWorkTime(timeInMinutes);
+  };
+
+  const handleChangeBreakTime = (timeInMinutes: number) => {
+    setBreakTime(timeInMinutes);
+  };
+
   const pauseTimer = () => {
     setIsActive((prevIsActive) => !prevIsActive);
   };
@@ -110,7 +121,13 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
 
   return (
     <Box>
-      <Heading as={"h1"} size={"4xl"} textAlign={"center"}>
+      <Heading
+        as={"h1"}
+        size={"4xl"}
+        textAlign={"center"}
+        fontSize={"9xl"}
+        opacity={0.3}
+      >
         {displayTime(timeRemaining)}
       </Heading>
       <Center>
@@ -129,8 +146,30 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
             variant={"ghost"}
             onClick={resetTimer}
           />
+          <IconButton
+            size={"lg"}
+            aria-label="settings"
+            icon={<HiCog6Tooth />}
+            variant={"ghost"}
+            onClick={onOpen}
+          />
         </HStack>
       </Center>
+      <PomodoroSerttingsModal
+        modalProps={{
+          isOpen,
+          onClose,
+          closeOnEsc: true,
+        }}
+        settings={{
+          workTime,
+          breakTime,
+        }}
+        onSettingsChange={{
+          handleChangeWorkTime,
+          handleChangeBreakTime,
+        }}
+      />
     </Box>
   );
 };
