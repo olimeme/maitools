@@ -8,6 +8,7 @@ import {
   Heading,
   Text,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
@@ -21,6 +22,7 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
   workTime,
   breakTime,
 }) => {
+  const toast = useToast();
   const [timeRemaining, setTimeRemaining] = useState<number>(
     () =>
       getInitialStateFromLocalStorage("timeRemaining", workTime * 60) as number
@@ -31,9 +33,8 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
   const [isActive, setIsActive] = useState<boolean>(
     () => getInitialStateFromLocalStorage("isActive", false) as boolean
   );
-  const timePassed = useMemo(
-    () => workTime * 60 - timeRemaining,
-    [timeRemaining]
+  const timePassed = useRef(
+    getInitialStateFromLocalStorage("passedTime", 0) as number
   );
 
   useEffect(() => {
@@ -42,10 +43,11 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
     const interval = setInterval(() => {
       setTimeRemaining((prevTimeRemaining) => {
         if (prevTimeRemaining === 0) {
+          timePassed.current = 0;
           setIsWorking((prevIsWorking) => !prevIsWorking);
           return isWorking ? breakTime * 60 : workTime * 60;
         }
-
+        timePassed.current++;
         return prevTimeRemaining - 1;
       });
     }, 1000);
@@ -54,12 +56,25 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
   }, [isActive, workTime, breakTime]);
 
   useEffect(() => {
+    if (workTime === 0 || breakTime === 0) return;
+    const currentTime = isWorking ? workTime : breakTime;
+    setTimeRemaining(
+      currentTime * 60 - timePassed.current < 0
+        ? 0
+        : currentTime * 60 - timePassed.current
+    );
+  }, [isWorking, workTime, breakTime]);
+
+  useEffect(() => {
     localStorage.setItem("timeRemaining", JSON.stringify(timeRemaining));
+    localStorage.setItem("passedTime", JSON.stringify(timePassed.current));
+    localStorage.setItem("workTime", JSON.stringify(workTime));
+    localStorage.setItem("breakTime", JSON.stringify(breakTime));
     localStorage.setItem("isWorking", JSON.stringify(isWorking));
     localStorage.setItem("isActive", JSON.stringify(isActive));
   }, [timeRemaining, isWorking, isActive]);
 
-  const toggleActive = () => {
+  const pauseTimer = () => {
     setIsActive((prevIsActive) => !prevIsActive);
   };
 
@@ -67,7 +82,10 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
     setIsActive(false);
     setIsWorking(true);
     setTimeRemaining(workTime * 60);
+    timePassed.current = 0;
+
     localStorage.removeItem("timeRemaining");
+    localStorage.removeItem("passedTime");
     localStorage.removeItem("isWorking");
     localStorage.removeItem("isActive");
   };
@@ -86,10 +104,9 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
       <Heading as={"h1"} size={"4xl"} textAlign={"center"}>
         {displayTime(timeRemaining)}
       </Heading>
-      {/* <Text>Time passed: {timePassed}</Text> */}
       <Center>
         <HStack mt={8}>
-          <Button size={"lg"} onClick={toggleActive}>
+          <Button size={"lg"} onClick={pauseTimer}>
             {isActive ? "Pause" : "Start"}
           </Button>
           <Button size={"lg"} onClick={resetTimer} variant={"ghost"}>

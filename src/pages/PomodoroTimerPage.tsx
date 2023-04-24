@@ -12,10 +12,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import PomodoroTimer from "../components/PomodoroTimer";
+import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
 
 const PomodoroTimerPage = () => {
-  const [workTime, setWorkTime] = useState<number>(25);
-  const [breakTime, setBreakTime] = useState<number>(5);
+  const [workTime, setWorkTime] = useState<number>(
+    () => getInitialStateFromLocalStorage("workTime", 25) as number
+  );
+  const [breakTime, setBreakTime] = useState<number>(
+    () => getInitialStateFromLocalStorage("breakTime", 5) as number
+  );
 
   return (
     <MotionWrapper>
@@ -34,7 +39,7 @@ const PomodoroTimerPage = () => {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setWorkTime(+e.target.value)
                   }
-                  value={workTime}
+                  value={workTime === 0 ? "" : workTime}
                   type="number"
                 />
                 <Input
@@ -44,7 +49,7 @@ const PomodoroTimerPage = () => {
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setBreakTime(+e.target.value)
                   }
-                  value={breakTime}
+                  value={breakTime === 0 ? "" : breakTime}
                   type="number"
                 />
               </VStack>
