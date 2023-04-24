@@ -15,6 +15,7 @@ import {
 import { Link } from "react-router-dom";
 import MotionWrapper from "../components/MotionWrapper";
 import "@fontsource/quicksand/700.css";
+import "@fontsource/quicksand/600.css";
 
 type CardItem = { heading: string; desc: string; link: string };
 
@@ -22,27 +23,27 @@ const LandingPage = () => {
   const cardItems: CardItem[] = [
     {
       heading: "Markdown",
-      desc: "Write stuff... like a programmer.",
+      desc: "good for note-taking",
       link: "/markdown",
     },
     {
       heading: "Pomodoro Timer",
-      desc: "Focus, focus, focus...",
+      desc: "focus using a tomato method",
       link: "/pomodoro-timer",
     },
     {
       heading: "Whiteboard",
-      desc: "Let's work together!",
+      desc: "work together",
       link: "/whiteboard",
     },
     {
-      heading: "Todo list",
-      desc: "Todotodotodotodoooooo",
+      heading: "To do list",
+      desc: "get stuff done",
       link: "/todo-list",
     },
     {
       heading: "Kanban board",
-      desc: "Plan, start, progress, finish, organize.",
+      desc: "plan, start, progress, finish, organize.",
       link: "/todo-list",
     },
   ];
