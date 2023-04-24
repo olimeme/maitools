@@ -9,6 +9,7 @@ import {
   Heading,
   Input,
   Spacer,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import PomodoroTimer from "../components/PomodoroTimer";
@@ -32,6 +33,7 @@ const PomodoroTimerPage = () => {
           <Box flex={1}>
             <Center>
               <VStack>
+                <Text>Work time:</Text>
                 <Input
                   variant="filled"
                   placeholder="Work time"
@@ -42,6 +44,7 @@ const PomodoroTimerPage = () => {
                   value={workTime === 0 ? "" : workTime}
                   type="number"
                 />
+                <Text pt={8}>Break time:</Text>
                 <Input
                   variant="filled"
                   placeholder="Break time"
