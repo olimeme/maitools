@@ -44,14 +44,26 @@ const PomodoroTimer: React.FC<PomodoroTimerProps> = ({
       setTimeRemaining((prevTimeRemaining) => {
         if (prevTimeRemaining === 0) {
           timePassed.current = 0;
-          setIsWorking((prevIsWorking) => !prevIsWorking);
+          setIsWorking((prevIsWorking) => {
+            toast({
+              title: prevIsWorking ? "Break time!" : "Work time!",
+              description: prevIsWorking
+                ? "Go recharge you batteries!"
+                : "Time to give it your 100%!",
+              status: "success",
+              duration: 4000,
+              isClosable: true,
+              variant: "subtle",
+              position: "bottom-right",
+            });
+            return !prevIsWorking;
+          });
           return isWorking ? breakTime * 60 : workTime * 60;
         }
         timePassed.current++;
         return prevTimeRemaining - 1;
       });
     }, 1000);
-
     return () => clearInterval(interval);
   }, [isActive, workTime, breakTime]);
 
