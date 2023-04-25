@@ -2,6 +2,7 @@ import { useContext } from "react";
 import {
   Box,
   Button,
+  ButtonGroup,
   Center,
   HStack,
   Heading,
@@ -14,17 +15,37 @@ import { PomodoroTimerContext, PomodoroTimerHook } from "../App";
 
 const PomodoroTimer = () => {
   const {
-    data: { displayTimeRemaining, workTime, breakTime, isActive },
+    data: { displayTimeRemaining, workTime, breakTime, isActive, isWorking },
     handlers: {
       pauseTimer,
       resetTimer,
       handleChangeBreakTime,
       handleChangeWorkTime,
+      handleChangeTimerStatus,
     },
     notificationToast: { onOpen, isOpen, onClose },
   } = useContext(PomodoroTimerContext);
+
   return (
     <Box>
+      <Center>
+        <HStack>
+          <ButtonGroup size="lg" isAttached variant="ghost" mb={8}>
+            <Button
+              onClick={() => handleChangeTimerStatus("work")}
+              variant={isWorking ? "solid" : "ghost"}
+            >
+              Work
+            </Button>
+            <Button
+              onClick={() => handleChangeTimerStatus("break")}
+              variant={isWorking ? "ghost" : "solid"}
+            >
+              Break
+            </Button>
+          </ButtonGroup>
+        </HStack>
+      </Center>
       <Heading
         as={"h1"}
         size={"4xl"}

@@ -1,5 +1,7 @@
 import {
   Button,
+  FormControl,
+  FormLabel,
   HStack,
   Input,
   Modal,
@@ -26,6 +28,10 @@ const PomodoroSerttingsModal = ({
   settings,
   onSettingsChange,
 }: PomodoroSettingsProps) => {
+  const [input, setInput] = useState("");
+
+  const isError = input === "";
+
   return (
     <Modal {...modalProps}>
       <ModalOverlay />
@@ -34,36 +40,37 @@ const PomodoroSerttingsModal = ({
         <ModalCloseButton />
         <ModalBody>
           <HStack>
-            <Stack>
-              <Text>Work time:</Text>
-              <Input
-                variant="filled"
-                placeholder="Work time"
-                size={"lg"}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  onSettingsChange.handleChangeWorkTime(
-                    parseInt(e.target.value)
-                  )
-                }
-                value={settings.workTime === 0 ? "" : settings.workTime}
-                type="number"
-              />
-            </Stack>
-            <Stack>
-              <Text>Break time:</Text>
-              <Input
-                variant="filled"
-                placeholder="Break time"
-                size={"lg"}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  onSettingsChange.handleChangeBreakTime(
-                    parseInt(e.target.value)
-                  )
-                }
-                value={settings.breakTime === 0 ? "" : settings.breakTime}
-                type="number"
-              />
-            </Stack>
+            <FormControl isInvalid={isError}>
+              <Stack>
+                <FormLabel>Work time:</FormLabel>
+                <Input
+                  variant="filled"
+                  placeholder="Work time"
+                  size={"lg"}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    onSettingsChange.handleChangeWorkTime(e.target.value);
+                    setInput(e.target.value);
+                  }}
+                  value={settings.workTime}
+                  type="number"
+                />
+              </Stack>
+            </FormControl>
+            <FormControl isInvalid={isError}>
+              <Stack>
+                <FormLabel>Break time:</FormLabel>
+                <Input
+                  variant="filled"
+                  placeholder="Break time"
+                  size={"lg"}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onSettingsChange.handleChangeBreakTime(e.target.value)
+                  }
+                  value={settings.breakTime}
+                  type="number"
+                />
+              </Stack>
+            </FormControl>
           </HStack>
         </ModalBody>
         <ModalFooter>
