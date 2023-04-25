@@ -6,25 +6,34 @@ import {
 import WithNavbarRoutes from "./routes/WithNavbarRoutes";
 import { AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router";
+import Navbar from "./components/Navbar";
+import { useTimer } from "./hooks/useTimer";
+import { createContext } from "react";
+
+export type PomodoroTimerHook = ReturnType<typeof useTimer>;
+
+export const PomodoroTimerContext = createContext<PomodoroTimerHook>(
+  {} as PomodoroTimerHook
+);
+
 function App() {
   const location = useLocation();
+  const pomodoroTimerHook = useTimer();
   return (
-    <div className="App">
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          {/* <Route element={<WithoutNavbarRoutes />}>
-          {public_route_group_without_navbar.map((route, idx) => (
-            <Route key={idx} {...route} />
-          ))}
-        </Route> */}
-          <Route element={<WithNavbarRoutes />}>
-            {public_route_group.map((route, idx) => (
-              <Route key={idx} {...route} />
-            ))}
-          </Route>
-        </Routes>
-      </AnimatePresence>
-    </div>
+    <PomodoroTimerContext.Provider value={pomodoroTimerHook}>
+      <div className="App">
+        <Navbar />
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route>
+              {public_route_group.map((route, idx) => (
+                <Route key={idx} {...route} />
+              ))}
+            </Route>
+          </Routes>
+        </AnimatePresence>
+      </div>
+    </PomodoroTimerContext.Provider>
   );
 }
 

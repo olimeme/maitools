@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   Box,
   Button,
@@ -7,21 +8,16 @@ import {
   MenuItem,
   MenuList,
   Spacer,
+  Text,
 } from "@chakra-ui/react";
 import DarkModeSwitch from "./DarkModeSwitch";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
-import CondencedPomodoroTimer from "./CondencedPomodoroTimer";
+import { PomodoroTimerContext } from "../App";
 const Navbar = () => {
-  const [currentTimeForPomodoro, setCurrentTimeForPomodoro] = useState<number>(
-    () => getInitialStateFromLocalStorage("timeRemaining", 25 * 60) as number
-  );
-
-  console.log(
-    getInitialStateFromLocalStorage("timeRemaining", 25 * 60) as number
-  );
+  const {
+    data: { displayTimeRemaining },
+  } = useContext(PomodoroTimerContext);
   return (
     <Flex>
       <Box p="4">
@@ -30,9 +26,11 @@ const Navbar = () => {
         </Link>
       </Box>
       <Spacer />
-      <Box p="6">
+      <Box p="4">
         <Link to={"/pomodoro-timer"}>
-          <CondencedPomodoroTimer currentTime={currentTimeForPomodoro} />
+          <Button variant={"ghost"}>
+            <Text>{displayTimeRemaining}</Text>
+          </Button>
         </Link>
       </Box>
       <Box p="4">
