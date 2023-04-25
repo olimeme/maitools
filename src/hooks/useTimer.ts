@@ -2,6 +2,8 @@ import { useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
 
+type PomodoroTimerStatus = "work" | "break";
+
 export const useTimer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -42,7 +44,7 @@ export const useTimer = () => {
               duration: 4000,
               isClosable: true,
               variant: "subtle",
-              position: "bottom-right",
+              position: "bottom",
             });
             return !prevIsWorking;
           });
@@ -88,14 +90,20 @@ export const useTimer = () => {
 
   const resetTimer = () => {
     setIsActive(false);
-    setIsWorking(true);
-    setTimeRemaining(workTime * 60);
+    setTimeRemaining(isWorking ? workTime * 60 : breakTime * 60);
     timePassed.current = 0;
 
     localStorage.removeItem("timeRemaining");
     localStorage.removeItem("passedTime");
     localStorage.removeItem("isWorking");
     localStorage.removeItem("isActive");
+  };
+
+  const handleChangeTimerStatus = (status: PomodoroTimerStatus) => {
+    setIsWorking(status === "work");
+    setIsActive(false);
+    setTimeRemaining(status === "work" ? workTime * 60 : breakTime * 60);
+    timePassed.current = 0;
   };
 
   const displayTime = (seconds: number) => {
@@ -114,6 +122,7 @@ export const useTimer = () => {
       workTime,
       breakTime,
       isActive,
+      isWorking,
     },
     notificationToast: {
       isOpen,
@@ -125,6 +134,7 @@ export const useTimer = () => {
       resetTimer,
       handleChangeBreakTime,
       handleChangeWorkTime,
+      handleChangeTimerStatus,
     },
   };
 };
