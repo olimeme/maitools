@@ -14,7 +14,7 @@ import {
 import DarkModeSwitch from "./DarkModeSwitch";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
-import { PomodoroTimerContext } from "../App";
+import { PomodoroTimerContext } from "../contexts/PomodoroTimerContext";
 const Navbar = () => {
   const {
     data: { displayTimeRemaining, isPomodoroPageOpen, isActive },
@@ -29,7 +29,7 @@ const Navbar = () => {
       <Spacer />
       {!isPomodoroPageOpen && isActive && (
         <Tooltip label={"Pomodoro timer"} fontSize={"md"}>
-          <Box p="4">
+          <Box py="4">
             <Link to={"/pomodoro-timer"}>
               <Button variant={"ghost"}>
                 <Text>{displayTimeRemaining}</Text>
@@ -38,7 +38,7 @@ const Navbar = () => {
           </Box>
         </Tooltip>
       )}
-      <Box p="4">
+      <Box p="4" gap={4}>
         <Menu>
           <MenuButton
             as={Button}
