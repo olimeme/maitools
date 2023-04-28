@@ -11,7 +11,7 @@ import {
 import { FaUndo } from "react-icons/fa";
 import { HiPause, HiPlay, HiCog6Tooth } from "react-icons/hi2";
 import PomodoroSerttingsModal from "./PomodoroSerttingsModal";
-import { PomodoroTimerContext, PomodoroTimerHook } from "../App";
+import { PomodoroTimerContext } from "../contexts/PomodoroTimerContext";
 
 const PomodoroTimer = () => {
   const {

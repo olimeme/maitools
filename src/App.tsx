@@ -1,26 +1,14 @@
 import { Routes, Route } from "react-router-dom";
-import {
-  public_route_group,
-  public_route_group_without_navbar,
-} from "./routes/publicRoutes";
-import WithNavbarRoutes from "./routes/WithNavbarRoutes";
+import { public_route_group } from "./routes/publicRoutes";
 import { AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router";
 import Navbar from "./components/Navbar";
-import { useTimer } from "./hooks/useTimer";
-import { createContext } from "react";
-
-export type PomodoroTimerHook = ReturnType<typeof useTimer>;
-
-export const PomodoroTimerContext = createContext<PomodoroTimerHook>(
-  {} as PomodoroTimerHook
-);
+import PomodoroTimerProvider from "./contexts/PomodoroTimerContext";
 
 function App() {
   const location = useLocation();
-  const pomodoroTimerHook = useTimer();
   return (
-    <PomodoroTimerContext.Provider value={pomodoroTimerHook}>
+    <PomodoroTimerProvider>
       <div className="App">
         <Navbar />
         <AnimatePresence mode="wait">
@@ -33,7 +21,7 @@ function App() {
           </Routes>
         </AnimatePresence>
       </div>
-    </PomodoroTimerContext.Provider>
+    </PomodoroTimerProvider>
   );
 }
 

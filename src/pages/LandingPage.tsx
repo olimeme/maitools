@@ -55,11 +55,9 @@ const LandingPage = () => {
           <Center mt={"24"}>
             <Heading size={"3xl"}>maitools</Heading>
           </Center>
-          <Center mt={"24"}>
-            <Heading size={"md"} color={"gray"}>
-              all essential academic productivity tools
-            </Heading>
-          </Center>
+          <Heading size={"md"} color={"gray"} textAlign={"center"}>
+            all essential academic productivity tools
+          </Heading>
         </Stack>
         <Flex
           justify={"center"}
@@ -69,7 +67,7 @@ const LandingPage = () => {
           mt={"36"}
         >
           {cardItems.map((card, idx) => (
-            <Box key={idx} flexGrow={1} width={"auto"}>
+            <Box key={idx} flexGrow={1}>
               <Link to={card.link}>
                 <Card>
                   <CardBody>
