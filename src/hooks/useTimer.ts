@@ -1,12 +1,14 @@
 import { useDisclosure, useToast } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
+import { useLocation } from "react-router";
 
 type PomodoroTimerStatus = "work" | "break";
 
 export const useTimer = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const location = useLocation();
   const [workTime, setWorkTime] = useState<number>(
     () => getInitialStateFromLocalStorage("workTime", 25) as number
   );
@@ -26,6 +28,12 @@ export const useTimer = () => {
   const timePassed = useRef(
     getInitialStateFromLocalStorage("passedTime", 0) as number
   );
+  const [isPomodoroPageOpen, setIsPomodoroPageOpen] = useState(false);
+
+  useEffect(() => {
+    setIsPomodoroPageOpen(location.pathname === "/pomodoro-timer");
+    return () => setIsPomodoroPageOpen(false);
+  }, [location]);
 
   useEffect(() => {
     if (!isActive) return;
@@ -40,7 +48,7 @@ export const useTimer = () => {
               description: prevIsWorking
                 ? "Go recharge you batteries!"
                 : "Time to give it your 100%!",
-              status: "success",
+              status: "info",
               duration: 4000,
               isClosable: true,
               variant: "subtle",
@@ -123,6 +131,7 @@ export const useTimer = () => {
       breakTime,
       isActive,
       isWorking,
+      isPomodoroPageOpen,
     },
     notificationToast: {
       isOpen,
