@@ -8,6 +8,7 @@ import PomodoroTimerProvider, {
   PomodoroTimerContext,
 } from "./contexts/PomodoroTimerContext";
 import useAudioPlayer from "./hooks/useAudioPlayer";
+import breakTimeAudio from "../public/assets/audio/breakTime.mp3";
 
 function App() {
   const location = useLocation();
@@ -16,7 +17,7 @@ function App() {
   } = useContext(PomodoroTimerContext);
 
   const { repeatAudio: repeatAudioBreakTime } = useAudioPlayer({
-    src: "../../breakTime.mp3",
+    src: "../public/assets/audio/breakTime.mp3",
     loop: false,
   });
   useEffect(() => {
