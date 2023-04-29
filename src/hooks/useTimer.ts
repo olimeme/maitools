@@ -51,7 +51,6 @@ export const useTimer = () => {
               status: "info",
               duration: 4000,
               isClosable: true,
-              variant: "subtle",
               position: "bottom",
             });
             return !prevIsWorking;

@@ -1,27 +1,41 @@
 import { Routes, Route } from "react-router-dom";
+import { useEffect, useContext } from "react";
 import { public_route_group } from "./routes/publicRoutes";
 import { AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router";
 import Navbar from "./components/Navbar";
-import PomodoroTimerProvider from "./contexts/PomodoroTimerContext";
+import PomodoroTimerProvider, {
+  PomodoroTimerContext,
+} from "./contexts/PomodoroTimerContext";
+import useAudioPlayer from "./hooks/useAudioPlayer";
 
 function App() {
   const location = useLocation();
+  const {
+    data: { isActive, isWorking },
+  } = useContext(PomodoroTimerContext);
+
+  const { repeatAudio: repeatAudioBreakTime } = useAudioPlayer({
+    src: "../../breakTime.mp3",
+    loop: false,
+  });
+  useEffect(() => {
+    if (isActive) repeatAudioBreakTime(4);
+  }, [isWorking]);
+
   return (
-    <PomodoroTimerProvider>
-      <div className="App">
-        <Navbar />
-        <AnimatePresence mode="wait">
-          <Routes location={location} key={location.pathname}>
-            <Route>
-              {public_route_group.map((route, idx) => (
-                <Route key={idx} {...route} />
-              ))}
-            </Route>
-          </Routes>
-        </AnimatePresence>
-      </div>
-    </PomodoroTimerProvider>
+    <div className="App">
+      <Navbar />
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route>
+            {public_route_group.map((route, idx) => (
+              <Route key={idx} {...route} />
+            ))}
+          </Route>
+        </Routes>
+      </AnimatePresence>
+    </div>
   );
 }
 
