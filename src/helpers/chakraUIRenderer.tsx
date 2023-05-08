@@ -33,7 +33,6 @@ function getCoreProps(props: GetCoreProps): any {
 }
 
 function convertTextToHeadingId(text: string) {
-  if (text === undefined) text = "";
   let filteredString = text.split(" ").join("-").toLowerCase();
   let forbiddenChars = ["/", "?", "&", "=", ".", '"', "'", ")", "("];
 
@@ -175,7 +174,7 @@ export const defaults: Defaults = {
         <Heading
           my={4}
           id={`${convertTextToHeadingId(
-            Array.isArray(children) ? children[0]!.toString() : "sample"
+            Array.isArray(children) ? children[0]!.toString() : ""
           )}`}
           as={`h${level}`}
           size={sizes[`${level - 1}`]}
