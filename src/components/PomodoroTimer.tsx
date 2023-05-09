@@ -22,8 +22,9 @@ const PomodoroTimer = () => {
       handleChangeBreakTime,
       handleChangeWorkTime,
       handleChangeTimerStatus,
+      handleFormValidity,
     },
-    notificationToast: { onOpen, isOpen, onClose },
+    notificationToast: { onOpen, isOpen, handleCloseModal },
   } = useContext(PomodoroTimerContext);
 
   return (
@@ -83,7 +84,7 @@ const PomodoroTimer = () => {
       <PomodoroSerttingsModal
         modalProps={{
           isOpen,
-          onClose,
+          handleCloseModal,
           closeOnEsc: true,
         }}
         settings={{
@@ -93,6 +94,7 @@ const PomodoroTimer = () => {
         onSettingsChange={{
           handleChangeWorkTime,
           handleChangeBreakTime,
+          handleFormValidity,
         }}
       />
     </Box>
