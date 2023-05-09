@@ -28,6 +28,9 @@ export const useTimer = () => {
   const timePassed = useRef(
     getInitialStateFromLocalStorage("passedTime", 0) as number
   );
+  const [isFormValid, setIsFormValid] = useState(
+    () => getInitialStateFromLocalStorage("isFormValid", true) as boolean
+  );
   const [isPomodoroPageOpen, setIsPomodoroPageOpen] = useState(false);
 
   useEffect(() => {
@@ -84,10 +87,12 @@ export const useTimer = () => {
   }, [timeRemaining, isWorking, isActive]);
 
   const handleChangeWorkTime = (timeInMinutes: number) => {
+    localStorage.setItem("workTime", JSON.stringify(timeInMinutes));
     setWorkTime(timeInMinutes);
   };
 
   const handleChangeBreakTime = (timeInMinutes: number) => {
+    localStorage.setItem("breakTime", JSON.stringify(timeInMinutes));
     setBreakTime(timeInMinutes);
   };
 
@@ -122,6 +127,15 @@ export const useTimer = () => {
       .padStart(2, "0")}`;
   };
 
+  const handleFormValidity = (isValid: boolean) => {
+    localStorage.setItem("isFormValid", JSON.stringify(isValid));
+    setIsFormValid(isValid);
+  };
+
+  const handleCloseModal = () => {
+    if (isFormValid) onClose();
+  };
+
   return {
     data: {
       displayTimeRemaining: displayTime(timeRemaining),
@@ -135,7 +149,7 @@ export const useTimer = () => {
     notificationToast: {
       isOpen,
       onOpen,
-      onClose,
+      handleCloseModal,
     },
     handlers: {
       pauseTimer,
@@ -143,6 +157,7 @@ export const useTimer = () => {
       handleChangeBreakTime,
       handleChangeWorkTime,
       handleChangeTimerStatus,
+      handleFormValidity,
     },
   };
 };

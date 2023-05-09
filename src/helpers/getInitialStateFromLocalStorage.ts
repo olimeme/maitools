@@ -3,7 +3,9 @@ export const getInitialStateFromLocalStorage = (
   defaultValue: number | boolean | string
 ): number | boolean | string => {
   const storedValue = localStorage.getItem(key);
-  return storedValue !== null && storedValue !== "undefined"
+  return storedValue !== null &&
+    storedValue !== "undefined" &&
+    storedValue !== undefined
     ? JSON.parse(storedValue)
     : defaultValue;
 };
