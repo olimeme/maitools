@@ -10,7 +10,7 @@ export const useTimer = () => {
   const toast = useToast();
   const location = useLocation();
   const [workTime, setWorkTime] = useState<number>(
-    () => getInitialStateFromLocalStorage("workTime", 25) as number
+    () => getInitialStateFromLocalStorage("workTime", 20) as number
   );
   const [breakTime, setBreakTime] = useState<number>(
     () => getInitialStateFromLocalStorage("breakTime", 5) as number

@@ -5,7 +5,8 @@ export const getInitialStateFromLocalStorage = (
   const storedValue = localStorage.getItem(key);
   return storedValue !== null &&
     storedValue !== "undefined" &&
-    storedValue !== undefined
+    storedValue !== undefined &&
+    !storedValue
     ? JSON.parse(storedValue)
     : defaultValue;
 };
