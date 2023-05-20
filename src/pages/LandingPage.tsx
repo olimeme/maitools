@@ -44,7 +44,7 @@ const LandingPage = () => {
     {
       heading: "Kanban board",
       desc: "plan, start, progress, finish, organize.",
-      link: "/todo-list",
+      link: "/kanban",
     },
   ];
 
