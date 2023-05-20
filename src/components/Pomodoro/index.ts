@@ -1,3 +1,3 @@
 import PomodoroSettingsModal from "./PomodoroSettingsModal";
-import PomdoroTimer from "./PomodoroTimer";
-export { PomodoroSettingsModal, PomdoroTimer };
+import PomodoroTimer from "./PomodoroTimer";
+export { PomodoroSettingsModal, PomodoroTimer };
