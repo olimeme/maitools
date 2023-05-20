@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MotionWrapper from "../components/MotionWrapper";
 import { Button, Center, Container, Flex, Heading } from "@chakra-ui/react";
 import { BsCloudRainHeavy } from "react-icons/bs";
-import PomodoroTimer from "../components/PomodoroTimer";
+import { PomodoroTimer } from "../components/Pomodoro";
 import useAudioPlayer from "../hooks/useAudioPlayer";
 
 const PomodoroTimerPage = () => {
