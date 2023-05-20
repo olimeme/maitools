@@ -17,14 +17,14 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
+import { getInitialStateFromLocalStorage } from "../../helpers/getInitialStateFromLocalStorage";
 interface PomodoroSettingsProps {
   //TODO: set types
   settings: any;
   onSettingsChange: any;
   modalProps: any;
 }
-const PomodoroSerttingsModal = ({
+const PomodoroSettingsModal = ({
   modalProps,
   settings,
   onSettingsChange,
@@ -115,4 +115,4 @@ const PomodoroSerttingsModal = ({
   );
 };
 
-export default PomodoroSerttingsModal;
+export default PomodoroSettingsModal;

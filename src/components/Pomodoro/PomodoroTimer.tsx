@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { FaUndo } from "react-icons/fa";
 import { HiPause, HiPlay, HiCog6Tooth } from "react-icons/hi2";
-import PomodoroSerttingsModal from "./PomodoroSerttingsModal";
+import PomodoroSettingsModal from "./PomodoroSettingsModal";
 import { PomodoroTimerContext } from "../contexts/PomodoroTimerContext";
 
 const PomodoroTimer = () => {
@@ -81,7 +81,7 @@ const PomodoroTimer = () => {
           />
         </HStack>
       </Center>
-      <PomodoroSerttingsModal
+      <PomodoroSettingsModal
         modalProps={{
           isOpen,
           handleCloseModal,

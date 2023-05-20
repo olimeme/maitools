@@ -11,7 +11,7 @@ import {
   Text,
   Tooltip,
 } from "@chakra-ui/react";
-import DarkModeSwitch from "./DarkModeSwitch";
+import { DarkModeSwitch } from "./DarkMode";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import { PomodoroTimerContext } from "../contexts/PomodoroTimerContext";
