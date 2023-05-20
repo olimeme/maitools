@@ -1,6 +1,6 @@
 import ReactMarkdown, { Components } from "react-markdown";
 import remarkGfm from "remark-gfm";
-import ChakraUIRenderer from "../helpers/chakraUIRenderer";
+import ChakraUIRenderer from "../../helpers/chakraUIRenderer";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSanitize from "rehype-sanitize";

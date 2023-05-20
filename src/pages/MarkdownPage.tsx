@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MotionWrapper from "../components/MotionWrapper";
 import { Box, Flex, Heading, Textarea } from "@chakra-ui/react";
-import MarkdownRenderer from "../components/MarkdownRenderer";
+import MarkdownRenderer from "../components/Markdown/MarkdownRenderer";
 import { markdownPageInitialValue } from "../helpers/markdownPageInitialValue";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
 
