@@ -26,7 +26,6 @@ const KanbanCard = ({
           {...provided.dragHandleProps}
           p={2}
           mt={2}
-          maxW="sm"
           bg={colorMode === "dark" ? "#2e2e2e" : "white"}
           borderWidth="1px"
           borderRadius="lg"
