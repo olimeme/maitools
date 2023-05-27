@@ -21,7 +21,7 @@ interface KanbanColumnProps {
 const KanbanColumn = ({ items, columnName }: KanbanColumnProps) => {
   return (
     <Flex flexDirection={"column"} px={4} width={"xs"}>
-      <Editable mb={2} defaultValue={columnName}>
+      <Editable mb={2} defaultValue={columnName} fontSize={"2xl"}>
         <EditablePreview />
         <EditableInput />
       </Editable>

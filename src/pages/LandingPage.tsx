@@ -16,11 +16,11 @@ import { Link } from "react-router-dom";
 import MotionWrapper from "../components/MotionWrapper";
 import "@fontsource/quicksand/700.css";
 import "@fontsource/quicksand/600.css";
-
-type CardItem = { heading: string; desc: string; link: string };
+import { TCardItem } from "../interfaces/TCardItem";
+import NavCard from "../components/NavCard";
 
 const LandingPage = () => {
-  const cardItems: CardItem[] = [
+  const cardItems: TCardItem[] = [
     {
       heading: "Markdown",
       desc: "good for note-taking",
@@ -67,23 +67,7 @@ const LandingPage = () => {
           mt={"36"}
         >
           {cardItems.map((card, idx) => (
-            <Box key={idx} flexGrow={1}>
-              <Link to={card.link}>
-                <Card>
-                  <CardBody>
-                    <Heading>{card.heading}</Heading>
-                    <Text color={"gray"}>{card.desc}</Text>
-                  </CardBody>
-                  <CardFooter>
-                    <Link to={card.link}>
-                      <Button rightIcon={<ChevronRightIcon />}>
-                        Go to {card.heading}
-                      </Button>
-                    </Link>
-                  </CardFooter>
-                </Card>
-              </Link>
-            </Box>
+            <NavCard key={idx} card={card} />
           ))}
         </Flex>
       </Container>

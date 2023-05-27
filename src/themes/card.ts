@@ -8,7 +8,12 @@ const cardTheme = {
         props.colorMode === "light"
           ? LIGHT_MODE_CARD_BG_COLOR
           : DARK_MODE_CARD_BG_COLOR,
-      boxShadow: "lg",
+      boxShadow: "md",
+      borderRadius: "xl",
+      borderWidth: 1,
+      borderStyle: "solid",
+      borderColor:
+        props.colorMode === "light" ? "blackAlpha.100" : "whiteAlpha.100",
     },
   }),
 };
