@@ -16,11 +16,13 @@ const KanbanBoardPage = () => {
     {
       id: 1,
       text: "to do something nice",
+      desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, eaque fugiat quasi iusto reprehenderit in aut, officiis delectus cum vitae molestiae laudantium nam saepe quidem ad magnam. Officia, quod a.",
       status: 1,
     },
     {
       id: 2,
       text: "Code",
+      desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, eaque fugiat quasi iusto reprehenderit in aut, officiis delectus cum vitae molestiae laudantium nam saepe quidem ad magnam. Officia, quod a.",
       status: 1,
     },
     {
@@ -71,6 +73,8 @@ const KanbanBoardPage = () => {
         onDragEnd={onDragEnd}
       >
         <Flex>
+          <KanbanColumn columnName="Planned" items={mockItems} />
+          <KanbanColumn columnName="Planned" items={mockItems} />
           <KanbanColumn columnName="Planned" items={mockItems} />
         </Flex>
       </DragDropContext>

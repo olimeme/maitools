@@ -1,7 +1,14 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { IKanbanCard } from "../../interfaces/Kanban";
-import { Box, Card, Heading, Text, useColorMode } from "@chakra-ui/react";
+import {
+  Box,
+  Card,
+  CardBody,
+  Heading,
+  Text,
+  useColorMode,
+} from "@chakra-ui/react";
 
 interface KanbanCardProps extends IKanbanCard {
   //   draggableId: string;
@@ -11,29 +18,31 @@ interface KanbanCardProps extends IKanbanCard {
 const KanbanCard = ({
   id,
   text,
+  desc,
   label,
   dueDate,
   status,
   cardIndex,
 }: KanbanCardProps) => {
-  const { colorMode } = useColorMode();
   return (
     <Draggable key={id} draggableId={id.toString()} index={cardIndex}>
       {(provided) => (
-        <Box
+        <Card
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          p={2}
           mt={2}
-          bg={colorMode === "dark" ? "#2e2e2e" : "white"}
-          borderWidth="1px"
-          borderRadius="lg"
-          boxShadow="lg"
         >
-          <Heading size="sm">{text}</Heading>
-          <Text>{status}</Text>
-        </Box>
+          <CardBody p={4}>
+            <Heading size="sm">{text}</Heading>
+            {desc && (
+              <Text fontSize={"sm"} mt={1} color={"gray"}>
+                {desc?.length > 60 ? `${desc?.slice(0, 60)}...` : desc}{" "}
+              </Text>
+            )}
+            {/* <Text>{status}</Text> */}
+          </CardBody>
+        </Card>
       )}
     </Draggable>
   );
