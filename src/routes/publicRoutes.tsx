@@ -1,3 +1,4 @@
+import KanbanBoardPage from "../pages/KanbanBoardPage";
 import LandingPage from "../pages/LandingPage";
 import MarkdownPage from "../pages/MarkdownPage";
 import PomodoroTimerPage from "../pages/PomodoroTimerPage";
@@ -9,6 +10,7 @@ export const public_route_group = [
   { path: "/pomodoro-timer", element: <PomodoroTimerPage /> },
   { path: "/whiteboard", element: <ComingSoonPage /> },
   { path: "/todo-list", element: <ComingSoonPage /> },
+  { path: "/kanban", element: <KanbanBoardPage /> },
   { path: "/", element: <LandingPage /> },
 ];
 
