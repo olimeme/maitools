@@ -1,7 +1,7 @@
-import React from "react";
 import MotionWrapper from "../components/MotionWrapper";
 import { Box, Center, Flex, Heading, Icon, Text } from "@chakra-ui/react";
 import { RiEmotionSadLine } from "react-icons/ri";
+import BackButton from "../components/BackButton";
 
 const ComingSoonPage = () => {
   return (
@@ -18,6 +18,7 @@ const ComingSoonPage = () => {
           <Text color={"gray"} mt={4}>
             Dev is probably working on it...or sleeping.
           </Text>
+          <BackButton mt={4} size={"lg"} />
         </Box>
       </Flex>
     </MotionWrapper>
