@@ -4,6 +4,7 @@ import { Button, Center, Container, Flex, Heading } from "@chakra-ui/react";
 import { BsCloudRainHeavy } from "react-icons/bs";
 import { PomodoroTimer } from "../components/Pomodoro";
 import useAudioPlayer from "../hooks/useAudioPlayer";
+import BackButton from "../components/BackButton";
 
 const PomodoroTimerPage = () => {
   // const [playing, toggle] = useAudioPlayer({
@@ -12,9 +13,7 @@ const PomodoroTimerPage = () => {
 
   return (
     <MotionWrapper>
-      <Heading mb={8} textAlign={"center"}>
-        Pomodoro timer
-      </Heading>
+      <BackButton />
       <Container maxW={"4xl"} pt={24}>
         <Center>
           <PomodoroTimer />
