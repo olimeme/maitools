@@ -1,97 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
 import MotionWrapper from "../components/MotionWrapper";
 import { Box, Flex, HStack, Heading } from "@chakra-ui/react";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  OnDragEndResponder,
-} from "react-beautiful-dnd";
-import { KanbanColumn } from "../components/Kanban";
-import { IKanbanCard } from "../interfaces/Kanban";
-import { DropResult } from "react-beautiful-dnd";
+
+import KanbanBoard from "../components/Kanban/KanbanBoard";
 
 const KanbanBoardPage = () => {
-  const [mockItems, setMockItems] = useState([
-    {
-      id: 1,
-      text: "to do something nice",
-      desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, eaque fugiat quasi iusto reprehenderit in aut, officiis delectus cum vitae molestiae laudantium nam saepe quidem ad magnam. Officia, quod a.",
-      status: 1,
-    },
-    {
-      id: 2,
-      text: "Code",
-      desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, eaque fugiat quasi iusto reprehenderit in aut, officiis delectus cum vitae molestiae laudantium nam saepe quidem ad magnam. Officia, quod a.",
-      status: 1,
-    },
-    {
-      id: 3,
-      text: "Do some shit",
-      status: 1,
-    },
-    {
-      id: 4,
-      text: "Nice item",
-      status: 1,
-    },
-  ]);
-
-  const onBeforeDragStart = useCallback(() => {
-    /*...*/
-    console.log("Drag before start");
-  }, []);
-  const onDragStart = useCallback(() => {
-    /*...*/
-    console.log("Drag start");
-  }, []);
-  const onDragUpdate = useCallback(() => {
-    console.log("Drag updated");
-    /*...*/
-  }, []);
-  const onDragEnd = (result: DropResult) => {
-    const { destination, source } = result;
-    console.log(result);
-    if (!result.destination) return;
-
-    const newItems = Array.from(mockItems);
-    const [reOrdered] = newItems.splice(source.index, 1);
-    newItems.splice(destination!.index, 0, reOrdered);
-    setMockItems(newItems);
-  };
-
   return (
     <MotionWrapper>
       <Heading mb={4} textAlign={"center"}>
         Kanban board
       </Heading>
-      <DragDropContext
-        onBeforeDragStart={onBeforeDragStart}
-        onDragStart={onDragStart}
-        onDragUpdate={onDragUpdate}
-        onDragEnd={onDragEnd}
-      >
-        <Flex>
-          <KanbanColumn
-            columnName="Planned"
-            items={mockItems}
-            droppableId="planned-1"
-            type="PLANNED"
-          />
-          <KanbanColumn
-            columnName="In Progress"
-            items={[]}
-            droppableId="progress-1"
-            type="PROGRESS"
-          />
-          <KanbanColumn
-            columnName="Finished"
-            items={[]}
-            droppableId="finished-1"
-            type="FINISHED"
-          />
-        </Flex>
-      </DragDropContext>
+      <KanbanBoard />
     </MotionWrapper>
   );
 };
