@@ -3,13 +3,12 @@ import MotionWrapper from "../components/MotionWrapper";
 import { Box, Flex, HStack, Heading } from "@chakra-ui/react";
 
 import KanbanBoard from "../components/Kanban/KanbanBoard";
+import BackButton from "../components/BackButton";
 
 const KanbanBoardPage = () => {
   return (
     <MotionWrapper>
-      <Heading mb={4} textAlign={"center"}>
-        Kanban board
-      </Heading>
+      <BackButton />
       <KanbanBoard />
     </MotionWrapper>
   );
