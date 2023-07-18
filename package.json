@@ -14,9 +14,11 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/quicksand": "^4.5.12",
+    "@types/uuid": "^9.0.2",
     "deepmerge": "^4.3.1",
     "framer-motion": "^10.10.0",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-markdown": "^8.0.7",
@@ -26,10 +28,12 @@
     "rehype-raw": "^6.1.1",
     "rehype-sanitize": "^5.0.1",
     "remark-gfm": "^3.0.1",
-    "remark-toc": "^8.0.1"
+    "remark-toc": "^8.0.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
+    "@types/react-beautiful-dnd": "^13.1.4",
     "@types/react-dom": "^18.0.11",
     "@vitejs/plugin-react": "^3.1.0",
     "typescript": "^4.9.3",

@@ -3,10 +3,13 @@ import {
   DARK_MODE_BODY_BG_COLOR,
   LIGHT_MODE_BODY_BG_COLOR,
 } from "./themes/colors";
-import { menuTheme } from "./themes/menu";
-import { cardTheme } from "./themes/card";
-import { linkTheme } from "./themes/link";
-import { modalTheme } from "./themes/modal";
+import {
+  cardTheme,
+  inputTheme,
+  linkTheme,
+  menuTheme,
+  modalTheme,
+} from "./themes";
 
 const theme = extendTheme({
   styles: {
@@ -35,6 +38,7 @@ const theme = extendTheme({
     Card: cardTheme,
     Link: linkTheme,
     Modal: modalTheme,
+    Input: inputTheme,
   },
 });
 
