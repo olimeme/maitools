@@ -4,6 +4,7 @@ import { Box, Flex, Heading, Textarea } from "@chakra-ui/react";
 import MarkdownRenderer from "../components/Markdown/MarkdownRenderer";
 import { markdownPageInitialValue } from "../helpers/markdownPageInitialValue";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
+import BackButton from "../components/BackButton";
 
 const MarkdownPage = () => {
   const [markdownValue, setMarkdownValue] = useState(
@@ -27,9 +28,7 @@ const MarkdownPage = () => {
 
   return (
     <MotionWrapper>
-      <Heading mb={8} textAlign={"center"}>
-        Markdown
-      </Heading>
+      <BackButton />
       <Flex wrap={"wrap"}>
         <Box flex={1}>
           <Textarea
