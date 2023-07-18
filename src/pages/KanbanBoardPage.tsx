@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import MotionWrapper from "../components/MotionWrapper";
-import { Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, HStack, Heading } from "@chakra-ui/react";
 import {
   DragDropContext,
   Draggable,
@@ -41,7 +41,6 @@ const KanbanBoardPage = () => {
     /*...*/
     console.log("Drag before start");
   }, []);
-
   const onDragStart = useCallback(() => {
     /*...*/
     console.log("Drag start");
@@ -73,9 +72,24 @@ const KanbanBoardPage = () => {
         onDragEnd={onDragEnd}
       >
         <Flex>
-          <KanbanColumn columnName="Planned" items={mockItems} />
-          <KanbanColumn columnName="Planned" items={mockItems} />
-          <KanbanColumn columnName="Planned" items={mockItems} />
+          <KanbanColumn
+            columnName="Planned"
+            items={mockItems}
+            droppableId="planned-1"
+            type="PLANNED"
+          />
+          <KanbanColumn
+            columnName="In Progress"
+            items={[]}
+            droppableId="progress-1"
+            type="PROGRESS"
+          />
+          <KanbanColumn
+            columnName="Finished"
+            items={[]}
+            droppableId="finished-1"
+            type="FINISHED"
+          />
         </Flex>
       </DragDropContext>
     </MotionWrapper>

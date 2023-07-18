@@ -16,16 +16,23 @@ import {
 interface KanbanColumnProps {
   items: IKanbanCard[];
   columnName: string;
+  droppableId: string;
+  type: string;
 }
 
-const KanbanColumn = ({ items, columnName }: KanbanColumnProps) => {
+const KanbanColumn = ({
+  items,
+  columnName,
+  droppableId,
+  type,
+}: KanbanColumnProps) => {
   return (
     <Flex flexDirection={"column"} px={4} width={"xs"}>
       <Editable mb={2} defaultValue={columnName} fontSize={"2xl"}>
         <EditablePreview />
         <EditableInput />
       </Editable>
-      <Droppable droppableId="droppable-1" type="PERSON">
+      <Droppable droppableId={droppableId} type={type}>
         {(provided, snapshot) => (
           <VStack
             ref={provided.innerRef}
