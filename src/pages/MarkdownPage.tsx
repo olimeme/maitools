@@ -5,6 +5,7 @@ import MarkdownRenderer from "../components/Markdown/MarkdownRenderer";
 import { markdownPageInitialValue } from "../helpers/markdownPageInitialValue";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
 import BackButton from "../components/BackButton";
+import { AutoResizeTextarea } from "../components/Markdown/AutoResizeTextarea";
 
 const MarkdownPage = () => {
   const [markdownValue, setMarkdownValue] = useState(
@@ -31,13 +32,10 @@ const MarkdownPage = () => {
       <BackButton />
       <Flex wrap={"wrap"}>
         <Box flex={1}>
-          <Textarea
-            minHeight={"2xl"}
-            variant={"filled"}
+          <AutoResizeTextarea
             value={markdownValue}
             onChange={handleInputChange}
             placeholder="Write any markdown text here..."
-            size={"lg"}
           />
         </Box>
         <Box flex={1} px={8}>
