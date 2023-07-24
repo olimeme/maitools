@@ -9,6 +9,7 @@ import {
   linkTheme,
   menuTheme,
   modalTheme,
+  drawerTheme,
 } from "./themes";
 
 const theme = extendTheme({
@@ -39,6 +40,7 @@ const theme = extendTheme({
     Link: linkTheme,
     Modal: modalTheme,
     Input: inputTheme,
+    Drawer: drawerTheme,
   },
 });
 

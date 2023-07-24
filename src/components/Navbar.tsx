@@ -1,24 +1,24 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import {
   Box,
   Button,
   Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Spacer,
   Text,
   Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { DarkModeSwitch } from "./DarkMode";
-import { ChevronDownIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
 import { PomodoroTimerContext } from "../contexts/PomodoroTimerContext";
+import { HamburgerIcon } from "@chakra-ui/icons";
+import NavigationDrawer from "./Drawer/NavigationDrawer";
 const Navbar = () => {
   const {
     data: { displayTimeRemaining, isPomodoroPageOpen, isActive },
   } = useContext(PomodoroTimerContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Flex>
       <Box p="4">
@@ -38,32 +38,16 @@ const Navbar = () => {
           </Box>
         </Tooltip>
       )}
-      <Box p="4" gap={4}>
-        <Menu>
-          <MenuButton
-            as={Button}
-            rightIcon={<ChevronDownIcon />}
-            variant={"ghost"}
-          >
-            tools
-          </MenuButton>
-          <MenuList>
-            <Link to={"/markdown"}>
-              <MenuItem>Markdown</MenuItem>
-            </Link>
-            <Link to={"/pomodoro-timer"}>
-              <MenuItem>Pomodoro Timer</MenuItem>
-            </Link>
-
-            <Link to={"/whiteboard"}>
-              <MenuItem>Whiteboard</MenuItem>
-            </Link>
-
-            <Link to={"/todo-list"}>
-              <MenuItem>Todo List</MenuItem>
-            </Link>
-          </MenuList>
-        </Menu>
+      <Box p="4">
+        <Button
+          variant={"ghost"}
+          onClick={onOpen}
+          mr={4}
+          rightIcon={<HamburgerIcon />}
+        >
+          tools
+        </Button>
+        <NavigationDrawer onClose={onClose} isOpen={isOpen} />
         <DarkModeSwitch />
       </Box>
     </Flex>
