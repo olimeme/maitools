@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   DragDropContext,
   Draggable,
@@ -11,6 +11,17 @@ import KanbanCard from "./KanbanCard";
 import IKanbanCard from "../../interfaces/Kanban/IKanbanCard.js";
 import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
 import { v4 as uuidv4 } from "uuid";
+import { getInitialStateFromLocalStorage } from "../../helpers/getInitialStateFromLocalStorage";
+import { Button, IconButton, Spacer } from "@chakra-ui/react";
+import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import PopoverConfirmation from "../PopoverConfirmation";
+
+interface KanbanBoardColumns {
+  [x: string]: {
+    name: string;
+    items: IKanbanCard[];
+  };
+}
 
 const itemsFromBackend: IKanbanCard[] = [
   {
@@ -37,7 +48,7 @@ const itemsFromBackend: IKanbanCard[] = [
   },
 ];
 
-const columnsFromBackend = {
+const columnsFromBackend: KanbanBoardColumns = {
   [uuidv4()]: {
     name: "Planned",
     items: itemsFromBackend,
@@ -53,9 +64,31 @@ const columnsFromBackend = {
 };
 
 const KanbanBoard = () => {
-  const [columns, setColumns] = useState(columnsFromBackend);
+  const [columns, setColumns] = useState(() =>
+    getInitialStateFromLocalStorage("kanbanBoardColumns", columnsFromBackend)
+  );
 
-  const onDragEnd = (result: DropResult) => {
+  useEffect(() => {
+    saveCardDrag();
+  }, [columns]);
+
+  const saveCardDrag = (): void => {
+    localStorage.setItem("kanbanBoardColumns", JSON.stringify(columns));
+  };
+
+  const addColumn = (): void => {
+    const newColumns = { ...columns };
+    newColumns[uuidv4()] = { name: "New column", items: [] };
+    setColumns(newColumns);
+  };
+
+  const deleteColumn = (columnId: string): void => {
+    const newColumns = { ...columns };
+    delete newColumns[columnId];
+    setColumns(newColumns);
+  };
+
+  const onDragEnd = (result: DropResult): void => {
     const { source, destination } = result;
     if (!destination) return;
 
@@ -94,16 +127,42 @@ const KanbanBoard = () => {
     }
   };
 
+  const handleColumnTitleChange = (columnId: string, newName: string): void => {
+    const newColumns = { ...columns };
+    newColumns[columnId].name = newName;
+    setColumns(newColumns);
+  };
+
   return (
     <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
       <Flex>
         {Object.entries(columns).map(([id, column]) => {
           return (
             <Flex key={id} flexDirection={"column"} px={4} width={"xs"}>
-              <Editable mb={2} defaultValue={column.name} fontSize={"2xl"}>
-                <EditablePreview />
-                <EditableInput />
-              </Editable>
+              <Flex>
+                <Editable
+                  mb={2}
+                  defaultValue={column.name}
+                  fontSize={"2xl"}
+                  onSubmit={(value) => handleColumnTitleChange(id, value)}
+                >
+                  <EditablePreview />
+                  <EditableInput />
+                </Editable>
+                <Spacer />
+                <PopoverConfirmation
+                  button={
+                    <IconButton
+                      size={"sm"}
+                      aria-label="Delete column"
+                      variant={"ghost"}
+                      icon={<DeleteIcon />}
+                      mt={1}
+                    />
+                  }
+                  onConfirm={() => deleteColumn(id)}
+                />
+              </Flex>
               <Droppable droppableId={id}>
                 {(provided, snapshot) => (
                   <VStack
@@ -122,6 +181,13 @@ const KanbanBoard = () => {
             </Flex>
           );
         })}
+        <Flex flexDirection={"column"} px={4} width={"xs"}>
+          <IconButton
+            aria-label="Add column"
+            icon={<AddIcon />}
+            onClick={addColumn}
+          ></IconButton>
+        </Flex>
       </Flex>
     </DragDropContext>
   );

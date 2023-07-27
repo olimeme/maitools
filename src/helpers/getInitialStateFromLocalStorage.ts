@@ -1,7 +1,7 @@
-export const getInitialStateFromLocalStorage = (
+export const getInitialStateFromLocalStorage = <T>(
   key: string,
-  defaultValue: number | boolean | string
-): number | boolean | string => {
+  defaultValue: T
+): T => {
   const storedValue = localStorage.getItem(key);
   return storedValue !== null &&
     storedValue !== undefined &&
