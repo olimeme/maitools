@@ -41,7 +41,7 @@ const PopoverConfirmation = ({
                   Are you sure you want to delete this column?
                 </Text>
                 <Text color={"gray"} fontSize="sm" mt={2}>
-                  All cards inside the column will be lost forever!
+                  All cards inside the column will be lost!
                 </Text>
               </PopoverBody>
               <PopoverFooter>
