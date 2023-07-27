@@ -10,6 +10,7 @@ import {
   menuTheme,
   modalTheme,
   drawerTheme,
+  popoverTheme,
 } from "./themes";
 
 const theme = extendTheme({
@@ -41,6 +42,7 @@ const theme = extendTheme({
     Modal: modalTheme,
     Input: inputTheme,
     Drawer: drawerTheme,
+    Popover: popoverTheme,
   },
 });
 
