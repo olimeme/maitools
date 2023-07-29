@@ -8,7 +8,6 @@ import BackButton from "../components/BackButton";
 const KanbanBoardPage = () => {
   return (
     <MotionWrapper>
-      <BackButton />
       <KanbanBoard />
     </MotionWrapper>
   );

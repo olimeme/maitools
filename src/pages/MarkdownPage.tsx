@@ -29,8 +29,7 @@ const MarkdownPage = () => {
 
   return (
     <MotionWrapper>
-      <BackButton />
-      <Flex wrap={"wrap"}>
+      <Flex wrap={"wrap"} mx={4}>
         <Box flex={1}>
           <AutoResizeTextarea
             value={markdownValue}
@@ -38,7 +37,7 @@ const MarkdownPage = () => {
             placeholder="Write any markdown text here..."
           />
         </Box>
-        <Box flex={1} px={8}>
+        <Box flex={1} px={4}>
           <MarkdownRenderer markdownValue={markdownValue} />
         </Box>
       </Flex>
