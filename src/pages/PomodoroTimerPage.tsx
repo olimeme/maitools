@@ -13,7 +13,6 @@ const PomodoroTimerPage = () => {
 
   return (
     <MotionWrapper>
-      <BackButton />
       <Container maxW={"4xl"} pt={24}>
         <Center>
           <PomodoroTimer />
