@@ -187,7 +187,8 @@ const KanbanBoard = () => {
                     }
                     transition={"0.3s ease-in-out"}
                     borderRadius={"xl"}
-                    p={2}
+                    py={1}
+                    px={2}
                   >
                     {column.items.map((item, idx) => (
                       <KanbanCard key={idx} {...item} cardIndex={idx} />
@@ -202,6 +203,7 @@ const KanbanBoard = () => {
                 icon={<AddIcon />}
                 onClick={() => addCard({ [id]: column })}
                 variant={"ghost"}
+                borderRadius={"xl"}
               ></IconButton>
             </Flex>
           );
@@ -212,6 +214,7 @@ const KanbanBoard = () => {
             icon={<AddIcon />}
             onClick={addColumn}
             variant={"ghost"}
+            borderRadius={"xl"}
           ></IconButton>
         </Flex>
       </Flex>
