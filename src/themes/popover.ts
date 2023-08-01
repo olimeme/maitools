@@ -9,6 +9,7 @@ const popoverTheme = {
           ? LIGHT_MODE_CARD_BG_COLOR
           : DARK_MODE_CARD_BG_COLOR,
       boxShadow: "md",
+      borderRadius: "xl",
     },
   }),
 };

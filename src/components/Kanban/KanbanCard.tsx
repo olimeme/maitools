@@ -18,10 +18,10 @@ interface KanbanCardProps extends IKanbanCard {
 const KanbanCard = ({
   id,
   text,
-  desc,
-  label,
-  dueDate,
-  status,
+  // desc,
+  // label,
+  // dueDate,
+  // status,
   cardIndex,
 }: KanbanCardProps) => {
   return (
@@ -32,14 +32,15 @@ const KanbanCard = ({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           mt={2}
+          borderRadius={"xl"}
         >
           <CardBody p={4}>
             <Heading size="sm">{text}</Heading>
-            {desc && (
+            {/* {desc && (
               <Text fontSize={"sm"} mt={1} color={"gray"}>
                 {desc?.length > 60 ? `${desc?.slice(0, 60)}...` : desc}{" "}
               </Text>
-            )}
+            )} */}
             {/* <Text>{status}</Text> */}
           </CardBody>
         </Card>
