@@ -15,6 +15,7 @@ import { getInitialStateFromLocalStorage } from "../../helpers/getInitialStateFr
 import { Button, IconButton, Spacer } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import PopoverConfirmation from "../PopoverConfirmation";
+import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
 
 interface KanbanBoardColumns {
   [x: string]: {
@@ -27,24 +28,24 @@ const itemsFromBackend: IKanbanCard[] = [
   {
     id: 1,
     text: "to do something nice",
-    desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, eaque fugiat quasi iusto reprehenderit in aut, officiis delectus cum vitae molestiae laudantium nam saepe quidem ad magnam. Officia, quod a.",
-    status: 1,
+    // desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, eaque fugiat quasi iusto reprehenderit in aut, officiis delectus cum vitae molestiae laudantium nam saepe quidem ad magnam. Officia, quod a.",
+    // status: 1,
   },
   {
     id: 2,
     text: "Code",
-    desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, eaque fugiat quasi iusto reprehenderit in aut, officiis delectus cum vitae molestiae laudantium nam saepe quidem ad magnam. Officia, quod a.",
-    status: 1,
+    // desc: "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Est, eaque fugiat quasi iusto reprehenderit in aut, officiis delectus cum vitae molestiae laudantium nam saepe quidem ad magnam. Officia, quod a.",
+    // status: 1,
   },
   {
     id: 3,
     text: "Do some shit",
-    status: 1,
+    // status: 1,
   },
   {
     id: 4,
     text: "Nice item",
-    status: 1,
+    // status: 1,
   },
 ];
 
@@ -64,6 +65,7 @@ const columnsFromBackend: KanbanBoardColumns = {
 };
 
 const KanbanBoard = () => {
+  const { changeColorBasedOnTheme } = useDarkModeChecker();
   const [columns, setColumns] = useState(() =>
     getInitialStateFromLocalStorage("kanbanBoardColumns", columnsFromBackend)
   );
@@ -85,6 +87,15 @@ const KanbanBoard = () => {
   const deleteColumn = (columnId: string): void => {
     const newColumns = { ...columns };
     delete newColumns[columnId];
+    setColumns(newColumns);
+  };
+
+  const addCard = (columnItem: KanbanBoardColumns): void => {
+    const column = Object.entries(columnItem);
+    const [[columnId, { name, items }]] = column;
+    items.push({ id: uuidv4(), text: "Testing item" });
+    const newColumns = { ...columns, [columnId]: { name, items } };
+    console.log(newColumns);
     setColumns(newColumns);
   };
 
@@ -169,7 +180,14 @@ const KanbanBoard = () => {
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                     align={"stretch"}
-                    minHeight={"40rem"}
+                    bgColor={
+                      snapshot.isDraggingOver
+                        ? changeColorBasedOnTheme("whiteAlpha.200", "gray.100")
+                        : ""
+                    }
+                    transition={"0.3s ease-in-out"}
+                    borderRadius={"xl"}
+                    p={2}
                   >
                     {column.items.map((item, idx) => (
                       <KanbanCard key={idx} {...item} cardIndex={idx} />
@@ -178,6 +196,13 @@ const KanbanBoard = () => {
                   </VStack>
                 )}
               </Droppable>
+              <IconButton
+                mt={2}
+                aria-label="Add card"
+                icon={<AddIcon />}
+                onClick={() => addCard({ [id]: column })}
+                variant={"ghost"}
+              ></IconButton>
             </Flex>
           );
         })}
@@ -186,6 +211,7 @@ const KanbanBoard = () => {
             aria-label="Add column"
             icon={<AddIcon />}
             onClick={addColumn}
+            variant={"ghost"}
           ></IconButton>
         </Flex>
       </Flex>
