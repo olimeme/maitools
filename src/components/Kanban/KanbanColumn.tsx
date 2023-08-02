@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import KanbanCard from "./KanbanCard";
 import { IKanbanCard } from "../../interfaces/Kanban";
@@ -7,9 +7,11 @@ import {
   Editable,
   EditableInput,
   EditablePreview,
+  Fade,
   Flex,
   Heading,
   IconButton,
+  Slide,
   Spacer,
   Text,
   VStack,
@@ -17,6 +19,7 @@ import {
 import PopoverConfirmation from "../PopoverConfirmation";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { KanbanBoardColumns } from "./KanbanBoard";
+import { useKanbanBoardContext } from "../../contexts/KanbanBoardContext";
 
 interface KanbanColumnProps {
   column: KanbanBoardColumns;
@@ -38,14 +41,27 @@ const KanbanColumn = ({
 }: KanbanColumnProps) => {
   const columnObj = Object.entries(column);
   const [[columnId, { name, items }]] = columnObj;
+
+  const { focusCardOnMount, setFocusCardOnMount } = useKanbanBoardContext();
+
+  useEffect(() => {
+    setFocusCardOnMount(true);
+  }, []);
   return (
-    <Flex key={columnId} flexDirection={"column"} px={4} width={"xs"}>
+    <Flex
+      key={columnId}
+      flexDirection={"column"}
+      px={4}
+      width={"xs"}
+      transition={"0.2s ease-in-out"}
+    >
       <Flex>
         <Editable
           mb={2}
           defaultValue={name}
           fontSize={"2xl"}
           onSubmit={(value) => handleColumnTitleChange(columnId, value)}
+          startWithEditView={focusCardOnMount}
         >
           <EditablePreview />
           <EditableInput />
@@ -64,12 +80,21 @@ const KanbanColumn = ({
           onConfirm={() => deleteColumn(columnId)}
         />
       </Flex>
+      <IconButton
+        mt={2}
+        aria-label="Add card"
+        icon={<AddIcon />}
+        onClick={() => addCard({ [columnId]: { name, items } })}
+        variant={"ghost"}
+        borderRadius={"xl"}
+      ></IconButton>
       <Droppable droppableId={columnId}>
         {(provided, snapshot) => (
           <VStack
             {...provided.droppableProps}
             ref={provided.innerRef}
             align={"stretch"}
+            minHeight={"70vh"}
             bgColor={
               snapshot.isDraggingOver
                 ? changeColorBasedOnTheme("whiteAlpha.200", "gray.100")
@@ -92,14 +117,6 @@ const KanbanColumn = ({
           </VStack>
         )}
       </Droppable>
-      <IconButton
-        mt={2}
-        aria-label="Add card"
-        icon={<AddIcon />}
-        onClick={() => addCard({ [columnId]: { name, items } })}
-        variant={"ghost"}
-        borderRadius={"xl"}
-      ></IconButton>
     </Flex>
   );
 };

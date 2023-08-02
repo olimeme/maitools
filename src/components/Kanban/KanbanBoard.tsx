@@ -1,28 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  OnDragEndResponder,
-} from "react-beautiful-dnd";
+import { DragDropContext } from "react-beautiful-dnd";
 import { DropResult } from "react-beautiful-dnd";
 import { Flex, VStack } from "@chakra-ui/layout";
-import KanbanCard from "./KanbanCard";
 import IKanbanCard from "../../interfaces/Kanban/IKanbanCard.js";
-import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
 import { v4 as uuidv4 } from "uuid";
 import { getInitialStateFromLocalStorage } from "../../helpers/getInitialStateFromLocalStorage";
-import {
-  Button,
-  IconButton,
-  Spacer,
-  useEditableControls,
-} from "@chakra-ui/react";
+import { IconButton } from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
-import PopoverConfirmation from "../PopoverConfirmation";
 import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
 import KanbanColumn from "./KanbanColumn";
-import { KanbanBoardContext } from "../../contexts/KanbanBoardCardHandlersContext";
+import { KanbanBoardContext } from "../../contexts/KanbanBoardContext";
 
 export interface KanbanBoardColumns {
   [x: string]: {
@@ -76,6 +63,7 @@ const KanbanBoard = () => {
   const [columns, setColumns] = useState(() =>
     getInitialStateFromLocalStorage("kanbanBoardColumns", columnsFromBackend)
   );
+  const [focusCardOnMount, setFocusCardOnMount] = useState<boolean>(false);
 
   useEffect(() => {
     saveCardDrag();
@@ -88,6 +76,7 @@ const KanbanBoard = () => {
   const addColumn = (): void => {
     const newColumns = { ...columns };
     newColumns[uuidv4()] = { name: "New column", items: [] };
+    setFocusCardOnMount(true);
     setColumns(newColumns);
   };
 
@@ -100,13 +89,15 @@ const KanbanBoard = () => {
   const addCard = (columnItem: KanbanBoardColumns): void => {
     const column = Object.entries(columnItem);
     const [[columnId, { name, items }]] = column;
-    items.push({ id: uuidv4(), text: "Testing item" });
+    items.push({ id: uuidv4(), text: "New item" });
     const newColumns = { ...columns, [columnId]: { name, items } };
     console.log(newColumns);
+    setFocusCardOnMount(true);
     setColumns(newColumns);
   };
 
   const onDragEnd = (result: DropResult): void => {
+    setFocusCardOnMount(false);
     const { source, destination } = result;
     if (!destination) return;
 
@@ -151,7 +142,22 @@ const KanbanBoard = () => {
     setColumns(newColumns);
   };
 
-  const handleEditCard = (cardId: IKanbanCard["id"], columnId: string) => {};
+  const handleEditCard = (
+    cardId: IKanbanCard["id"],
+    columnId: string,
+    newString: string
+  ) => {
+    const newColumns = { ...columns };
+    const editedCardColumn = newColumns[columnId].items.map((card) => {
+      if (card.id === cardId) card.text = newString;
+      return card;
+    });
+    const result = {
+      ...newColumns,
+      [columnId]: { items: editedCardColumn, name: newColumns[columnId].name },
+    };
+    setColumns(result);
+  };
 
   const handleDeleteCard = (cardId: IKanbanCard["id"], columnId: string) => {
     const newColumns = { ...columns };
@@ -166,7 +172,14 @@ const KanbanBoard = () => {
   };
 
   return (
-    <KanbanBoardContext.Provider value={{ handleEditCard, handleDeleteCard }}>
+    <KanbanBoardContext.Provider
+      value={{
+        handleEditCard,
+        handleDeleteCard,
+        focusCardOnMount,
+        setFocusCardOnMount,
+      }}
+    >
       <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
         <Flex>
           {Object.entries(columns).map(([id, column]) => {
