@@ -81,7 +81,12 @@ const KanbanColumn = ({
             px={2}
           >
             {items.map((item, idx) => (
-              <KanbanCard key={item.id} {...item} cardIndex={idx} />
+              <KanbanCard
+                key={item.id}
+                {...item}
+                cardIndex={idx}
+                columnId={columnId}
+              />
             ))}
             {provided.placeholder}
           </VStack>
