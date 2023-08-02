@@ -22,6 +22,7 @@ import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import PopoverConfirmation from "../PopoverConfirmation";
 import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
 import KanbanColumn from "./KanbanColumn";
+import { KanbanBoardContext } from "../../contexts/KanbanBoardCardHandlersContext";
 
 export interface KanbanBoardColumns {
   [x: string]: {
@@ -150,31 +151,48 @@ const KanbanBoard = () => {
     setColumns(newColumns);
   };
 
+  const handleEditCard = (cardId: IKanbanCard["id"], columnId: string) => {};
+
+  const handleDeleteCard = (cardId: IKanbanCard["id"], columnId: string) => {
+    const newColumns = { ...columns };
+    const deletedCardColumn = newColumns[columnId].items.filter(
+      (card) => card.id !== cardId
+    );
+    const result = {
+      ...newColumns,
+      [columnId]: { items: deletedCardColumn, name: newColumns[columnId].name },
+    };
+    setColumns(result);
+  };
+
   return (
-    <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
-      <Flex>
-        {Object.entries(columns).map(([id, column]) => {
-          return (
-            <KanbanColumn
-              column={{ [id]: column }}
-              changeColorBasedOnTheme={changeColorBasedOnTheme}
-              handleColumnTitleChange={handleColumnTitleChange}
-              deleteColumn={deleteColumn}
-              addCard={addCard}
-            />
-          );
-        })}
-        <Flex flexDirection={"column"} px={4} width={"xs"}>
-          <IconButton
-            aria-label="Add column"
-            icon={<AddIcon />}
-            onClick={addColumn}
-            variant={"ghost"}
-            borderRadius={"xl"}
-          ></IconButton>
+    <KanbanBoardContext.Provider value={{ handleEditCard, handleDeleteCard }}>
+      <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
+        <Flex>
+          {Object.entries(columns).map(([id, column]) => {
+            return (
+              <KanbanColumn
+                key={id}
+                column={{ [id]: column }}
+                changeColorBasedOnTheme={changeColorBasedOnTheme}
+                handleColumnTitleChange={handleColumnTitleChange}
+                deleteColumn={deleteColumn}
+                addCard={addCard}
+              />
+            );
+          })}
+          <Flex flexDirection={"column"} px={4} width={"xs"}>
+            <IconButton
+              aria-label="Add column"
+              icon={<AddIcon />}
+              onClick={addColumn}
+              variant={"ghost"}
+              borderRadius={"xl"}
+            ></IconButton>
+          </Flex>
         </Flex>
-      </Flex>
-    </DragDropContext>
+      </DragDropContext>
+    </KanbanBoardContext.Provider>
   );
 };
 
