@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   DragDropContext,
   Draggable,
@@ -12,12 +12,18 @@ import IKanbanCard from "../../interfaces/Kanban/IKanbanCard.js";
 import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
 import { v4 as uuidv4 } from "uuid";
 import { getInitialStateFromLocalStorage } from "../../helpers/getInitialStateFromLocalStorage";
-import { Button, IconButton, Spacer } from "@chakra-ui/react";
+import {
+  Button,
+  IconButton,
+  Spacer,
+  useEditableControls,
+} from "@chakra-ui/react";
 import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import PopoverConfirmation from "../PopoverConfirmation";
 import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
+import KanbanColumn from "./KanbanColumn";
 
-interface KanbanBoardColumns {
+export interface KanbanBoardColumns {
   [x: string]: {
     name: string;
     items: IKanbanCard[];
@@ -149,63 +155,13 @@ const KanbanBoard = () => {
       <Flex>
         {Object.entries(columns).map(([id, column]) => {
           return (
-            <Flex key={id} flexDirection={"column"} px={4} width={"xs"}>
-              <Flex>
-                <Editable
-                  mb={2}
-                  defaultValue={column.name}
-                  fontSize={"2xl"}
-                  onSubmit={(value) => handleColumnTitleChange(id, value)}
-                >
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <Spacer />
-                <PopoverConfirmation
-                  button={
-                    <IconButton
-                      size={"sm"}
-                      aria-label="Delete column"
-                      variant={"ghost"}
-                      icon={<DeleteIcon />}
-                      mt={1}
-                    />
-                  }
-                  onConfirm={() => deleteColumn(id)}
-                />
-              </Flex>
-              <Droppable droppableId={id}>
-                {(provided, snapshot) => (
-                  <VStack
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    align={"stretch"}
-                    bgColor={
-                      snapshot.isDraggingOver
-                        ? changeColorBasedOnTheme("whiteAlpha.200", "gray.100")
-                        : ""
-                    }
-                    transition={"0.3s ease-in-out"}
-                    borderRadius={"xl"}
-                    py={1}
-                    px={2}
-                  >
-                    {column.items.map((item, idx) => (
-                      <KanbanCard key={idx} {...item} cardIndex={idx} />
-                    ))}
-                    {provided.placeholder}
-                  </VStack>
-                )}
-              </Droppable>
-              <IconButton
-                mt={2}
-                aria-label="Add card"
-                icon={<AddIcon />}
-                onClick={() => addCard({ [id]: column })}
-                variant={"ghost"}
-                borderRadius={"xl"}
-              ></IconButton>
-            </Flex>
+            <KanbanColumn
+              column={{ [id]: column }}
+              changeColorBasedOnTheme={changeColorBasedOnTheme}
+              handleColumnTitleChange={handleColumnTitleChange}
+              deleteColumn={deleteColumn}
+              addCard={addCard}
+            />
           );
         })}
         <Flex flexDirection={"column"} px={4} width={"xs"}>
