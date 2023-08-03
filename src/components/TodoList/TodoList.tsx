@@ -38,7 +38,6 @@ const TodoList = ({ items }: TodoListProps) => {
               spacing="1rem"
               borderRadius={"lg"}
               w={"full"}
-              overflowWrap={"anywhere"}
               transition={"0.2s ease-in-out"}
               onChange={() => handleCheckTask({ id, taskName })}
               _hover={{
@@ -48,7 +47,7 @@ const TodoList = ({ items }: TodoListProps) => {
                 ),
               }}
             >
-              {taskName}
+              <Text overflowWrap={"anywhere"}>{taskName}</Text>
             </Checkbox>
             <Divider my={2} />
           </motion.li>
