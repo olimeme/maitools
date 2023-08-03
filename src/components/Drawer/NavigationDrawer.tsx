@@ -32,8 +32,8 @@ const NavigationDrawer = ({ isOpen, onClose }: NavigationDrawerProps) => {
       <DrawerOverlay />
       <DrawerContent p={4}>
         <Heading mb={4}>Tools</Heading>
-        {drawerItems.map(({ link, name }) => (
-          <DrawerItem link={link} mb={2} onClose={onClose}>
+        {drawerItems.map(({ link, name }, idx) => (
+          <DrawerItem key={idx} link={link} mb={2} onClose={onClose}>
             <Flex>
               <Text>{name}</Text>
               <Spacer />
