@@ -1,4 +1,4 @@
-import TodoList from "./TodoList";
+import TodoListContent from "./TodoListContent";
 import TodoListItem from "./TodoListItem";
 
-export { TodoList, TodoListItem };
+export { TodoListContent, TodoListItem };
