@@ -9,6 +9,7 @@ const modalTheme = {
           ? LIGHT_MODE_BODY_BG_COLOR
           : DARK_MODE_BODY_BG_COLOR,
       boxShadow: "none",
+      borderRadius: "xl",
     },
   }),
 };
