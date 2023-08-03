@@ -15,9 +15,18 @@ import {
   Editable,
   EditablePreview,
   EditableInput,
+  EditableTextarea,
+  useEditableControls,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import useContextMenu from "../../hooks/useContextMenu";
-import { DeleteIcon, EditIcon, HamburgerIcon } from "@chakra-ui/icons";
+import {
+  CheckIcon,
+  CloseIcon,
+  DeleteIcon,
+  EditIcon,
+  HamburgerIcon,
+} from "@chakra-ui/icons";
 import { useKanbanBoardContext } from "../../contexts/KanbanBoardContext";
 import { KanbanBoardColumns } from "./KanbanBoard";
 
@@ -64,15 +73,15 @@ const KanbanCard = ({
                 <Flex>
                   <Editable
                     defaultValue={text}
+                    width="full"
+                    size={"sm"}
+                    startWithEditView={focusCardOnMount}
                     onSubmit={(newString) =>
                       handleEditCard(id, columnId, newString)
                     }
-                    size={"sm"}
-                    isPreviewFocusable={true}
-                    startWithEditView={focusCardOnMount}
                   >
-                    <EditablePreview as={Heading} size={"xs"} w={"100%"} />
-                    <EditableInput p={0} placeholder="Enter name" />
+                    <EditableInput />
+                    <EditablePreview as={Heading} size={"xs"} width="full" />
                   </Editable>
                   {/* {desc && (
                   <Text fontSize={"sm"} mt={1} color={"gray"}>
@@ -90,6 +99,7 @@ const KanbanCard = ({
                   />
                 </Flex>
               </CardBody>
+
               <MenuList borderRadius={"xl"}>
                 {/* <MenuItem onClick={} icon={<EditIcon />}>
                   Edit
