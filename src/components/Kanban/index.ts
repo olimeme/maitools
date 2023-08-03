@@ -1,2 +1,4 @@
 import KanbanColumn from "./KanbanColumn";
-export { KanbanColumn };
+import KanbanBoard from "./KanbanBoard";
+import KanbanCard from "./KanbanCard";
+export { KanbanColumn, KanbanBoard, KanbanCard };
