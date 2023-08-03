@@ -14,6 +14,7 @@ const menuTheme = {
           ? LIGHT_MODE_MENU_BG_COLOR
           : DARK_MODE_MENU_BG_COLOR,
       boxShadow: "lg",
+      borderRadius: "xl",
     },
     item: {
       bg:
