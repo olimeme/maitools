@@ -26,11 +26,9 @@ const NavCard = ({ card: { link, heading, desc } }: NavCardProps) => {
             <Text color={"gray"}>{desc}</Text>
           </CardBody>
           <CardFooter>
-            <Link to={link}>
-              <Button variant={"link"} rightIcon={<ChevronRightIcon />}>
-                Go to {heading}
-              </Button>
-            </Link>
+            <Button variant={"link"} rightIcon={<ChevronRightIcon />}>
+              Go to {heading}
+            </Button>
           </CardFooter>
         </Card>
       </Link>
