@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTodoListItemContext } from "../../contexts/TodoListItemContext";
+import { CheckIcon } from "@chakra-ui/icons";
 
 interface TodoListProps {
   items: ITodoListItem[];
@@ -30,7 +31,7 @@ const TodoList = ({ items }: TodoListProps) => {
             key={id}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ duration: 0.5, type: "spring" }}
+            transition={{ duration: 0.4, type: "spring" }}
           >
             <Checkbox
               aria-label={taskName}
@@ -38,7 +39,6 @@ const TodoList = ({ items }: TodoListProps) => {
               spacing="1rem"
               borderRadius={"lg"}
               w={"full"}
-              transition={"0.2s ease-in-out"}
               onChange={() => handleCheckTask({ id, taskName })}
               _hover={{
                 background: changeColorBasedOnTheme(
