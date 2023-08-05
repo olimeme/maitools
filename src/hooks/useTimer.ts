@@ -54,7 +54,7 @@ export const useTimer = () => {
               status: "info",
               duration: 4000,
               isClosable: true,
-              position: "bottom",
+              position: "bottom-right",
             });
             return !prevIsWorking;
           });
