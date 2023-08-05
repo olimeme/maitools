@@ -12,6 +12,7 @@ import {
   drawerTheme,
   popoverTheme,
 } from "./themes";
+import { checkboxTheme } from "./themes/checkbox";
 
 const theme = extendTheme({
   styles: {
@@ -43,6 +44,7 @@ const theme = extendTheme({
     Input: inputTheme,
     Drawer: drawerTheme,
     Popover: popoverTheme,
+    Checkbox: checkboxTheme,
   },
 });
 

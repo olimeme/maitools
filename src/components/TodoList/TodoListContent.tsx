@@ -27,6 +27,7 @@ import { getInitialStateFromLocalStorage } from "../../helpers/getInitialStateFr
 import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
 import TodoList from "./TodoList";
 import { TodoListItemContext } from "../../contexts/TodoListItemContext";
+import useCommandHistory from "../../hooks/useCommandHistory";
 
 export interface ITodoListItem {
   id: number | string;
@@ -74,6 +75,7 @@ const TodoListContent = () => {
   const [errorMessage, setErrorMessage] = useState<string>("");
   const ref = useRef<HTMLInputElement>(null);
   const toast = useToast();
+  const { registerAction, clearHistory } = useCommandHistory();
 
   useOutsideClick({
     ref: ref,
@@ -97,8 +99,10 @@ const TodoListContent = () => {
     e.preventDefault();
     if (hasError(taskName) || taskName.length === 0) return;
     const taskList = [...todoListItems];
-    taskList.push({ id: uuidv4(), taskName: taskName });
+    const newTask: ITodoListItem = { id: uuidv4(), taskName: taskName };
+    taskList.push(newTask);
     setTodoListItems(taskList);
+    clearHistory();
     setTaskName("");
   };
 
@@ -119,11 +123,30 @@ const TodoListContent = () => {
   };
 
   const handleCheckTask = (task: ITodoListItem) => {
-    const [item] = todoListItems.filter((item) => item.id === task.id);
-    console.log(item, task);
-    if (!item) return;
-    const arr = todoListItems.filter((task) => task.id !== item.id);
+    const { item, index } = todoListItems
+      .map((item, index) => ({ item, index }))
+      .find(({ item }) => item.id === task.id) || { item: null, index: -1 };
+
+    if (!item || index === -1) return;
+    const arr = [...todoListItems];
+    arr.splice(index, 1);
+
     setTodoListItems(arr);
+    registerAction(
+      () => setTodoListItems(arr),
+      () => {
+        arr.splice(index, 0, item);
+        setTodoListItems([...arr]);
+        toast({
+          title: "Undone!",
+          status: "warning",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+      }
+    );
+
     toast({
       title: "Task is complete!",
       description: <ToastUndoMessage />,
