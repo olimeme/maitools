@@ -15,20 +15,10 @@ import {
   Editable,
   EditablePreview,
   EditableInput,
-  EditableTextarea,
   useEditableControls,
-  ButtonGroup,
 } from "@chakra-ui/react";
-import useContextMenu from "../../hooks/useContextMenu";
-import {
-  CheckIcon,
-  CloseIcon,
-  DeleteIcon,
-  EditIcon,
-  HamburgerIcon,
-} from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon, HamburgerIcon } from "@chakra-ui/icons";
 import { useKanbanBoardContext } from "../../contexts/KanbanBoardContext";
-import { KanbanBoardColumns } from "./KanbanBoard";
 
 interface KanbanCardProps extends IKanbanCard {
   //   draggableId: string;
@@ -57,6 +47,18 @@ const KanbanCard = ({
     setFocusCardOnMount(true);
   }, []);
 
+  function EditableControls() {
+    const { isEditing, getEditButtonProps } = useEditableControls();
+
+    return isEditing ? (
+      <></>
+    ) : (
+      <MenuItem {...getEditButtonProps()} icon={<EditIcon />}>
+        Edit
+      </MenuItem>
+    );
+  }
+
   return (
     <>
       <Draggable key={id} draggableId={id.toString()} index={cardIndex}>
@@ -69,48 +71,47 @@ const KanbanCard = ({
               mt={2}
               borderRadius={"xl"}
             >
-              <CardBody p={4}>
-                <Flex>
-                  <Editable
-                    defaultValue={text}
-                    width="full"
-                    size={"sm"}
-                    startWithEditView={focusCardOnMount}
-                    onSubmit={(newString) =>
-                      handleEditCard(id, columnId, newString)
-                    }
-                  >
-                    <EditableInput />
+              <Editable
+                defaultValue={text}
+                width="full"
+                size={"sm"}
+                startWithEditView={focusCardOnMount}
+                onSubmit={(newString) =>
+                  handleEditCard(id, columnId, newString)
+                }
+                isPreviewFocusable={false}
+              >
+                <CardBody p={4}>
+                  <Flex>
                     <EditablePreview as={Heading} size={"xs"} width="full" />
-                  </Editable>
-                  {/* {desc && (
+                    <EditableInput />
+                    {/* {desc && (
                   <Text fontSize={"sm"} mt={1} color={"gray"}>
                   {desc?.length > 60 ? `${desc?.slice(0, 60)}...` : desc}{" "}
                   </Text>
                 )} */}
-                  {/* <Text>{status}</Text> */}
-                  <Spacer />
-                  <MenuButton
-                    mt={1}
-                    as={IconButton}
-                    size={"xs"}
-                    aria-label="Options"
-                    icon={<HamburgerIcon />}
-                  />
-                </Flex>
-              </CardBody>
+                    {/* <Text>{status}</Text> */}
+                    <Spacer />
+                    <MenuButton
+                      mt={1}
+                      as={IconButton}
+                      size={"xs"}
+                      aria-label="Options"
+                      icon={<HamburgerIcon />}
+                    />
+                  </Flex>
+                </CardBody>
 
-              <MenuList borderRadius={"xl"}>
-                {/* <MenuItem onClick={} icon={<EditIcon />}>
-                  Edit
-                </MenuItem> */}
-                <MenuItem
-                  onClick={() => handleDeleteCard(id, columnId)}
-                  icon={<DeleteIcon />}
-                >
-                  Delete
-                </MenuItem>
-              </MenuList>
+                <MenuList borderRadius={"xl"}>
+                  <EditableControls />
+                  <MenuItem
+                    onClick={() => handleDeleteCard(id, columnId)}
+                    icon={<DeleteIcon />}
+                  >
+                    Delete
+                  </MenuItem>
+                </MenuList>
+              </Editable>
             </Card>
           </Menu>
         )}
