@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Mousetrap from "mousetrap";
 
 type Action = () => void;
 
@@ -27,18 +28,9 @@ const useCommandHistory = () => {
   };
 
   useEffect(() => {
-    const handleUndoShortcut = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.key === "z") {
-        event.preventDefault();
-        undoLastAction();
-      }
-    };
-
-    window.addEventListener("keydown", handleUndoShortcut);
-
-    return () => {
-      window.removeEventListener("keydown", handleUndoShortcut);
-    };
+    Mousetrap.bind("mod+z", function () {
+      undoLastAction();
+    });
   }, [history]);
 
   return { registerAction, clearHistory };
