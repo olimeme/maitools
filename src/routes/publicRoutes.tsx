@@ -5,6 +5,8 @@ import PomodoroTimerPage from "../pages/PomodoroTimerPage";
 import WhiteboardPage from "../pages/WhiteboardPage";
 import ComingSoonPage from "../pages/ComingSoonPage";
 import TodoListPage from "../pages/TodoListPage";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
 export const public_route_group = [
   { path: "/markdown", element: <MarkdownPage /> },
@@ -12,6 +14,8 @@ export const public_route_group = [
   { path: "/whiteboard", element: <ComingSoonPage /> },
   { path: "/todo-list", element: <TodoListPage /> },
   { path: "/kanban", element: <KanbanBoardPage /> },
+  { path: "/login", element: <LoginPage /> },
+  { path: "/register", element: <RegisterPage /> },
   { path: "/", element: <LandingPage /> },
 ];
 

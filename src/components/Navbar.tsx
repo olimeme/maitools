@@ -20,8 +20,8 @@ const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Flex>
-      <Box p="4">
+    <Flex gap={4} p={4}>
+      <Box>
         <Link to={"/"}>
           <Button variant="ghost">maitools</Button>
         </Link>
@@ -38,7 +38,7 @@ const Navbar = () => {
           </Box>
         </Tooltip>
       )}
-      <Box p="4">
+      <Box>
         <Button
           variant={"ghost"}
           onClick={onOpen}
@@ -49,6 +49,11 @@ const Navbar = () => {
         </Button>
         <NavigationDrawer onClose={onClose} isOpen={isOpen} />
         <DarkModeSwitch />
+      </Box>
+      <Box>
+        <Link to={"/login"}>
+          <Button>Login</Button>
+        </Link>
       </Box>
     </Flex>
   );
