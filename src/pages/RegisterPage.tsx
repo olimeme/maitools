@@ -130,7 +130,7 @@ const RegisterPage = () => {
             <Button w={"full"} type={"submit"}>
               Register
             </Button>
-            <Button as={Link} w={"full"} variant={"ghost"} to="/login" p={2}>
+            <Button as={Link} w={"full"} variant={"link"} to="/login" p={2}>
               Already have an account?
             </Button>
           </VStack>
