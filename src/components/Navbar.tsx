@@ -29,7 +29,7 @@ const Navbar = () => {
       <Spacer />
       {!isPomodoroPageOpen && isActive && (
         <Tooltip label={"Pomodoro timer"} fontSize={"md"}>
-          <Box py="4">
+          <Box>
             <Link to={"/pomodoro-timer"}>
               <Button variant={"ghost"}>
                 <Text>{displayTimeRemaining}</Text>
