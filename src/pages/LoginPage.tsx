@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import MotionWrapper from "../components/MotionWrapper";
 import {
   Button,
@@ -49,6 +49,7 @@ const LoginPage = () => {
       alert(JSON.stringify(values, null, 2));
     },
   });
+
   return (
     <MotionWrapper>
       <Flex
