@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.10.6",
     "@fontsource/quicksand": "^4.5.12",
     "@types/uuid": "^9.0.2",
+    "axios": "^1.4.0",
     "deepmerge": "^4.3.1",
     "formik": "^2.4.3",
     "framer-motion": "^10.10.0",
