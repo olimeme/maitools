@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CookieManager } from "../helpers/cookieManager";
+import { CookieManager } from "../helpers/CookieManager";
 
 export interface LoginData {
   email: string;

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CookieManager } from "./cookieManager";
+import { CookieManager } from "./CookieManager";
 
 const authAxios = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
