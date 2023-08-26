@@ -1,13 +1,14 @@
 import axios from "axios";
+import { CookieManager } from "./cookieManager";
 
 const authAxios = axios.create({
-  baseURL: process.env.API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 300000,
 });
 
 authAxios.interceptors.request.use(
   (request) => {
-    request.headers.Authorization = `JWT ${localStorage.getItem("token")}`;
+    request.headers.Authorization = `JWT ${CookieManager.getCookie("token")}`;
     return request;
   },
 
@@ -18,10 +19,8 @@ authAxios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem("token");
+      CookieManager.eraseCookie("token");
       localStorage.removeItem("user");
-
-      window.location.href = "/login";
     }
 
     return Promise.reject(error);
