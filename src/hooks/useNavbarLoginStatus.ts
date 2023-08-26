@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useCustomToast from "./useCustomToast";
-import { CookieManager } from "../helpers/cookieManager";
+import { CookieManager } from "../helpers/CookieManager";
 import AuthService from "../services/AuthService";
 
 const useNavbarLoginStatus = () => {
