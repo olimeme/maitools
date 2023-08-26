@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -9,15 +9,17 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { DarkModeSwitch } from "./DarkMode";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PomodoroTimerContext } from "../contexts/PomodoroTimerContext";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import NavigationDrawer from "./Drawer/NavigationDrawer";
+import useNavbarLoginStatus from "../hooks/useNavbarLoginStatus";
 const Navbar = () => {
   const {
     data: { displayTimeRemaining, isPomodoroPageOpen, isActive },
   } = useContext(PomodoroTimerContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isLoggedIn, logout } = useNavbarLoginStatus();
 
   return (
     <Flex gap={4} p={4}>
@@ -51,9 +53,15 @@ const Navbar = () => {
         <DarkModeSwitch />
       </Box>
       <Box>
-        <Link to={"/login"}>
-          <Button>Login</Button>
-        </Link>
+        {isLoggedIn ? (
+          <Button variant={"ghost"} onClick={() => logout()}>
+            Logout
+          </Button>
+        ) : (
+          <Link to={"/login"}>
+            <Button variant={"ghost"}>Login</Button>
+          </Link>
+        )}
       </Box>
     </Flex>
   );

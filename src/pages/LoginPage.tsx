@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import MotionWrapper from "../components/MotionWrapper";
 import {
   Button,
@@ -10,16 +10,17 @@ import {
   Heading,
   Input,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Formik, FormikErrors, useFormik } from "formik";
-
-interface LoginData {
-  email: string;
-  password: string;
-}
+import useCustomToast from "../hooks/useCustomToast";
+import AuthService, { LoginData } from "../services/AuthService";
 
 const LoginPage = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const customToast = useCustomToast();
+  const navigate = useNavigate();
   const validate = (values: LoginData) => {
     const errors: FormikErrors<LoginData> = {};
 
@@ -32,11 +33,24 @@ const LoginPage = () => {
     }
     if (!values.password) {
       errors.password = "Required";
-    } else if (values.password.length < 8) {
-      errors.password = "Password has to contain at least 8 characters";
     }
-
     return errors;
+  };
+
+  const handleLoginSuccessful = () => {
+    customToast("Welcome!", "You have been logged in.", "success");
+    navigate(-1);
+  };
+
+  const handleLoginFailed = (errorMessage: string | undefined) => {
+    customToast("Error occured", errorMessage || "An error occured.", "error");
+  };
+  const handleOnSubmit = (values: LoginData) => {
+    setLoading(true);
+    AuthService.login(values)
+      .then((data) => handleLoginSuccessful())
+      .catch((error) => handleLoginFailed(error.message))
+      .finally(() => setLoading(false));
   };
 
   const formik = useFormik({
@@ -45,9 +59,7 @@ const LoginPage = () => {
       password: "",
     },
     validate,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-    },
+    onSubmit: handleOnSubmit,
   });
 
   return (
@@ -72,6 +84,7 @@ const LoginPage = () => {
                 value={formik.values.email}
                 id="email"
                 name="email"
+                disabled={loading}
               />
               <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
             </FormControl>
@@ -85,13 +98,21 @@ const LoginPage = () => {
                 value={formik.values.password}
                 id="password"
                 name="password"
+                disabled={loading}
               />
               <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
             </FormControl>
-            <Button w={"full"} type={"submit"}>
+            <Button w={"full"} type={"submit"} isLoading={loading}>
               Login
             </Button>
-            <Button as={Link} w={"full"} variant={"link"} to="/register" p={2}>
+            <Button
+              as={Link}
+              w={"full"}
+              variant={"link"}
+              to="/register"
+              p={2}
+              isLoading={loading}
+            >
               Sign up
             </Button>
           </VStack>
