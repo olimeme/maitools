@@ -30,4 +30,9 @@ export const landingPageCardItems: TLandingPageCardItems[] = [
     desc: "plan, start, progress, finish, organize.",
     link: "/kanban",
   },
+  {
+    heading: "Spaced repetition",
+    desc: "remember forever",
+    link: "/spaced-repetition",
+  },
 ];
