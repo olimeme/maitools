@@ -12,6 +12,7 @@ export const public_route_group = [
   { path: "/whiteboard", element: <ComingSoonPage /> },
   { path: "/todo-list", element: <TodoListPage /> },
   { path: "/kanban", element: <KanbanBoardPage /> },
+  { path: "/spaced-repetition", element: <ComingSoonPage /> },
   { path: "/", element: <LandingPage /> },
 ];
 
