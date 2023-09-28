@@ -5,6 +5,7 @@ import PomodoroTimerPage from "../pages/PomodoroTimerPage";
 import WhiteboardPage from "../pages/WhiteboardPage";
 import ComingSoonPage from "../pages/ComingSoonPage";
 import TodoListPage from "../pages/TodoListPage";
+import SpacedRepPage from "../pages/SpacedRepPage";
 
 export const public_route_group = [
   { path: "/markdown", element: <MarkdownPage /> },
@@ -12,7 +13,7 @@ export const public_route_group = [
   { path: "/whiteboard", element: <ComingSoonPage /> },
   { path: "/todo-list", element: <TodoListPage /> },
   { path: "/kanban", element: <KanbanBoardPage /> },
-  { path: "/spaced-repetition", element: <ComingSoonPage /> },
+  { path: "/spaced-repetition", element: <SpacedRepPage /> },
   { path: "/", element: <LandingPage /> },
 ];
 
