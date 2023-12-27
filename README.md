@@ -1,8 +1,8 @@
-# Maitools
+# maitools
 
 > All essential academic productivity tools
 
-Maitools is a comprehensive academic productivity website that integrates essential tools to enhance your workflow. The featured tools include:
+maitools is a comprehensive academic productivity website that integrates essential tools to enhance your workflow. The featured tools include:
 
 - **Pomodoro Timer:** Boost productivity with the Pomodoro technique.
 - **Whiteboard for Collaboration:** Collaborate in real-time using a digital whiteboard.
@@ -11,7 +11,7 @@ Maitools is a comprehensive academic productivity website that integrates essent
 - **Markdown Editor:** Write and format notes effortlessly using Markdown.
 - **Kanban Board:** Visualize tasks and manage workflow efficiently.
 
-Maitools is developed using React, TypeScript, and Vite, with Chakra UI component library.
+maitools is developed using React, TypeScript, and Vite, with Chakra UI component library.
 
 ## Features
 
@@ -45,7 +45,7 @@ Maitools is developed using React, TypeScript, and Vite, with Chakra UI componen
 
 ## Getting Started
 
-To run Maitools locally, follow these steps:
+To run maitools locally, follow these steps:
 
 1. Clone the repository:
 
