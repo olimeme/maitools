@@ -2,6 +2,8 @@
 
 > All essential academic productivity tools
 
+![screenshot of main page](https://github.com/olimeme/maitools/assets/39192645/d2107e2e-e9ec-469e-90cc-d01e54bebd75)
+
 maitools is a comprehensive academic productivity website that integrates essential tools to enhance your workflow. The featured tools include:
 
 - **Pomodoro Timer:** Boost productivity with the Pomodoro technique.
