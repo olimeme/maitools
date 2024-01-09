@@ -9,7 +9,7 @@ import TodoListPage from "../pages/TodoListPage";
 export const public_route_group = [
   { path: "/markdown", element: <MarkdownPage /> },
   { path: "/pomodoro-timer", element: <PomodoroTimerPage /> },
-  { path: "/whiteboard", element: <ComingSoonPage /> },
+  { path: "/whiteboard", element: <WhiteboardPage /> },
   { path: "/todo-list", element: <TodoListPage /> },
   { path: "/kanban", element: <KanbanBoardPage /> },
   { path: "/spaced-repetition", element: <ComingSoonPage /> },

@@ -32,6 +32,7 @@
     "rehype-sanitize": "^5.0.1",
     "remark-gfm": "^3.0.1",
     "remark-toc": "^8.0.1",
+    "roughjs": "^4.6.6",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
