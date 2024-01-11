@@ -242,14 +242,15 @@ const Canvas = () => {
         tool
       );
       setElements((prevState) => [...prevState, element]);
+      setSelectedElement(element);
       setAction("drawing");
     }
   };
 
   const handleMouseUp = (event: React.MouseEvent) => {
-    const index = elements.length - 1;
+    const index = selectedElement.id;
     const { id, type } = elements[index];
-    if (action === "drawing") {
+    if (action === "drawing" || action === "resize") {
       const { x1, y1, x2, y2 } = adjustElementCoodrinates(elements[index]);
       updateElement(id, x1, y1, x2, y2, type);
     }
