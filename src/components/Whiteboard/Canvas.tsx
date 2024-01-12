@@ -8,27 +8,30 @@ import React, {
 } from "react";
 import rough from "roughjs";
 import { ElementTypes } from "./ElementTypes";
-import { MdOutlineRectangle } from "react-icons/md";
 import { ElementCoordinates } from "./ElementCoordinates";
 import { Element } from "./Element";
+import useCommandHistory from "../../hooks/useCommandHistory";
+import { Drawable } from "roughjs/bin/core";
+import { Position } from "./Positions";
 
 const generator = rough.generator();
 const NAVBAR_OFFSET = 115;
 
 const Canvas = () => {
-  // TODO: add type to elements
-  const [elements, setElements] = useState<any[]>([]);
+  const [elements, setElements] = useState<Element[]>([]);
   const [action, setAction] = useState("none");
   const [tool, setTool] = useState<ElementTypes>("line");
-  const [selectedElement, setSelectedElement] = useState<any | null>(null);
-
+  const [selectedElement, setSelectedElement] = useState<Element | null>(null);
+  const { registerAction } = useCommandHistory();
   useLayoutEffect(() => {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const context = canvas.getContext("2d");
     context?.clearRect(0, 0, canvas.width, canvas.height);
 
     const roughCanvas = rough.canvas(canvas);
-    elements.forEach(({ roughElement }: any) => roughCanvas.draw(roughElement));
+    elements.forEach(({ roughElement }: { roughElement: Drawable }) =>
+      roughCanvas.draw(roughElement)
+    );
   }, [elements]);
 
   const distance = (a: { x: number; y: number }, b: { x: number; y: number }) =>
@@ -90,7 +93,7 @@ const Canvas = () => {
     return withinCircle;
   };
 
-  const positionWithinElement = (x: number, y: number, element: any) => {
+  const positionWithinElement = (x: number, y: number, element: Element) => {
     const { type, x1, x2, y1, y2 } = element;
     switch (type) {
       case "line":
@@ -124,7 +127,7 @@ const Canvas = () => {
     }
   };
 
-  const cursorForPosition = (element: any) => {
+  const cursorForPosition = (element: Element): string => {
     switch (element.position) {
       case "tl":
       case "br":
@@ -142,7 +145,7 @@ const Canvas = () => {
   const resizedCoordinates = (
     clientX: number,
     clientY: number,
-    position: string,
+    position: Position,
     coordinates: { x1: number; y1: number; x2: number; y2: number }
   ) => {
     const { x1, y1, x2, y2 } = coordinates;
@@ -170,8 +173,8 @@ const Canvas = () => {
     y1: number,
     x2: number,
     y2: number,
-    type: string
-  ) => {
+    type: ElementTypes
+  ): Element => {
     let roughElement;
     switch (type) {
       case "line":
@@ -191,11 +194,21 @@ const Canvas = () => {
         roughElement = generator.line(x1, y1, x2, y2, { stroke: "white" });
         break;
     }
-    return { id, x1, y1, x2, y2, type, roughElement };
+    return {
+      id,
+      type,
+      x1,
+      y1,
+      x2,
+      y2,
+      position: null,
+      roughElement,
+      offsetX: 0,
+      offsetY: 0  ,
+    };
   };
 
-  // TODO: add type to elements
-  const getElementAtPosition = (x: number, y: number, elements: any[]) => {
+  const getElementAtPosition = (x: number, y: number, elements: Element[]) => {
     return elements
       .map((element) => ({
         ...element,
@@ -210,7 +223,7 @@ const Canvas = () => {
     y1: number,
     x2: number,
     y2: number,
-    type: string
+    type: ElementTypes
   ) => {
     const updatedElement = createCanvasElement(id, x1, y1, x2, y2, type);
 
@@ -226,7 +239,7 @@ const Canvas = () => {
       if (element) {
         const offsetX = clientX - element.x1;
         const offsetY = clientY - element.y1;
-        setSelectedElement({ ...element, offsetX, offsetY });
+        setSelectedElement({ ...element, offsetX, offsetY } as Element);
         if (element.position === "inside") {
           setAction("moving");
         } else {
@@ -256,6 +269,43 @@ const Canvas = () => {
     if (action === "drawing" || action === "resize") {
       const { x1, y1, x2, y2 } = adjustElementCoodrinates(elements[index]);
       updateElement(id, x1, y1, x2, y2, type);
+
+      //TODO: refactor
+      registerAction(
+        () => {
+          const { x1, y1, x2, y2 } = adjustElementCoodrinates(elements[index]);
+          updateElement(id, x1, y1, x2, y2, type);
+        },
+        () => {
+          updateElement(
+            id,
+            selectedElement.x1,
+            selectedElement.y1,
+            selectedElement.x2,
+            selectedElement.y2,
+            type
+          );
+        }
+      );
+    }
+
+    if (tool === "selection") {
+      registerAction(
+        () => {
+          const { x1, y1, x2, y2 } = adjustElementCoodrinates(elements[index]);
+          updateElement(id, x1, y1, x2, y2, type);
+        },
+        () => {
+          updateElement(
+            id,
+            selectedElement.x1,
+            selectedElement.y1,
+            selectedElement.x2,
+            selectedElement.y2,
+            type
+          );
+        }
+      );
     }
     setAction("none");
     setSelectedElement(null);
@@ -270,7 +320,7 @@ const Canvas = () => {
       if (!(event.target instanceof HTMLElement)) return;
 
       event.target.style!.cursor = element
-        ? cursorForPosition(element)
+        ? cursorForPosition(element as Element)
         : "default";
     }
 
@@ -279,7 +329,7 @@ const Canvas = () => {
       const { x1, y1 } = elements[index];
       updateElement(index, x1, y1, clientX, clientY, tool);
     } else if (action === "moving") {
-      const { id, x1, x2, y1, y2, type, offsetX, offsetY } = selectedElement;
+      const { id, x1, x2, y1, y2, type, offsetX, offsetY } = selectedElement!;
 
       const width = x2 - x1;
       const height = y2 - y1;
@@ -294,7 +344,7 @@ const Canvas = () => {
         type
       );
     } else if (action === "resize") {
-      const { id, type, position, ...coordinates } = selectedElement;
+      const { id, type, position, ...coordinates } = selectedElement!;
       const { x1, y1, x2, y2 } = resizedCoordinates(
         clientX,
         clientY,
