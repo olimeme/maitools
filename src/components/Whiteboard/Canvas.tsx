@@ -148,11 +148,13 @@ const Canvas = () => {
     const { x1, y1, x2, y2 } = coordinates;
     switch (position) {
       case "tl":
+        return { x1: clientX, y1: clientY, x2, y2 };
       case "tr":
         return { x1, y1: clientY, x2: clientX, y2 };
       case "bl":
         return { x1: clientX, y1, x2, y2: clientY };
       case "br":
+        return { x1, y1, x2: clientX, y2: clientY };
       case "start":
         return { x1: clientX, y1: clientY, x2, y2 };
       case "end":
@@ -248,6 +250,7 @@ const Canvas = () => {
   };
 
   const handleMouseUp = (event: React.MouseEvent) => {
+    if (selectedElement === null) return;
     const index = selectedElement.id;
     const { id, type } = elements[index];
     if (action === "drawing" || action === "resize") {
