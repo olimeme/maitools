@@ -3,4 +3,6 @@ export type ElementTypes =
   | "rectangle"
   | "circle"
   | "text"
-  | "selection";
+  | "selection"
+  | "pencil"
+  | "eraser";

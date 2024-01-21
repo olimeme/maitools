@@ -1,11 +1,5 @@
-import { HStack, IconButton, Radio, RadioGroup } from "@chakra-ui/react";
-import React, {
-  MouseEvent,
-  MouseEventHandler,
-  createElement,
-  useLayoutEffect,
-  useState,
-} from "react";
+import { IconButton, Stack } from "@chakra-ui/react";
+import React, { MouseEvent, useLayoutEffect, useState } from "react";
 import rough from "roughjs";
 import { ElementTypes } from "./ElementTypes";
 import { ElementCoordinates } from "./ElementCoordinates";
@@ -13,9 +7,12 @@ import { Element } from "./Element";
 import useCommandHistory from "../../hooks/useCommandHistory";
 import { Drawable } from "roughjs/bin/core";
 import { Position } from "./Positions";
+import { FaEraser, FaHandPaper, FaPenFancy, FaRegSquare } from "react-icons/fa";
+import { SlGraph } from "react-icons/sl";
+
+import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
 
 const generator = rough.generator();
-const NAVBAR_OFFSET = 115;
 
 const Canvas = () => {
   const [elements, setElements] = useState<Element[]>([]);
@@ -23,6 +20,8 @@ const Canvas = () => {
   const [tool, setTool] = useState<ElementTypes>("line");
   const [selectedElement, setSelectedElement] = useState<Element | null>(null);
   const { registerAction } = useCommandHistory();
+  const { changeColorBasedOnTheme } = useDarkModeChecker();
+
   useLayoutEffect(() => {
     const canvas = document.getElementById("canvas") as HTMLCanvasElement;
     const context = canvas.getContext("2d");
@@ -178,20 +177,22 @@ const Canvas = () => {
     let roughElement;
     switch (type) {
       case "line":
-        roughElement = generator.line(x1, y1, x2, y2, { stroke: "white" });
+        roughElement = generator.line(x1, y1, x2, y2, {
+          stroke: "grey",
+        });
         break;
       case "rectangle":
         roughElement = generator.rectangle(x1, y1, x2 - x1, y2 - y1, {
-          stroke: "white",
+          stroke: "grey",
         });
         break;
       // case "circle":
-      //   roughElement = generator.circle(x1, y1, x2 - x1 || y2 - y1, {
-      //     stroke: "white",
-      //   });
+      //   roughElement = generator.circle(x1, y1, x2 - x1 || y2 - y1, { stroke: colorMode === "dark" ? "white" : "black"});
       //   break;
       default:
-        roughElement = generator.line(x1, y1, x2, y2, { stroke: "white" });
+        roughElement = generator.line(x1, y1, x2, y2, {
+          stroke: "grey",
+        });
         break;
     }
     return {
@@ -204,7 +205,7 @@ const Canvas = () => {
       position: null,
       roughElement,
       offsetX: 0,
-      offsetY: 0  ,
+      offsetY: 0,
     };
   };
 
@@ -355,25 +356,53 @@ const Canvas = () => {
     }
   };
 
+  const handleCurrentToolChange = (value: ElementTypes) => {
+    setTool(value);
+  };
+
   return (
     <>
-      <HStack>
-        <RadioGroup
-          onChange={(type) => {
-            setTool(type as ElementTypes);
-            console.log(type);
-          }}
-          value={tool}
-        >
-          <Radio value="selection">selection</Radio>
-          <Radio value="line">line</Radio>
-          <Radio value="rectangle">rectangle</Radio>
-          <Radio value="circle">circle</Radio>
-        </RadioGroup>
-      </HStack>
+      <Stack w={50} position={"absolute"} top={"30%"} m={4}>
+        <IconButton
+          aria-label="selection"
+          icon={<FaHandPaper />}
+          onClick={() => handleCurrentToolChange("selection")}
+        />
+        <IconButton
+          aria-label="line"
+          icon={<SlGraph />}
+          onClick={() => handleCurrentToolChange("line")}
+        />
+        <IconButton
+          aria-label="rectangle"
+          icon={<FaRegSquare />}
+          onClick={() => handleCurrentToolChange("rectangle")}
+        />
+        <IconButton
+          aria-label="pencil"
+          icon={<FaPenFancy />}
+          onClick={() => handleCurrentToolChange("pencil")}
+        />
+        <IconButton
+          aria-label="eraser"
+          icon={<FaEraser />}
+          onClick={() => handleCurrentToolChange("eraser")}
+        />
+      </Stack>
+      {/* <HStack w={50} position={"absolute"} bottom={"1%"} m={4}>
+        <IconButton
+          aria-label="undo"
+          icon={<FaUndo />}
+          onClick={() => handleUndo()}
+        />
+        <IconButton
+          aria-label="redo"
+          icon={<FaRedo />}
+          onClick={() => handleRedo()}
+        />
+      </HStack> */}
       <canvas
         id="canvas"
-        style={{ backgroundColor: "#363636" }}
         height={window.innerHeight}
         width={window.innerWidth}
         onMouseDown={handleMouseDown}

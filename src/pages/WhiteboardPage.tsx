@@ -4,11 +4,7 @@ import MotionWrapper from "../components/MotionWrapper";
 import { Canvas } from "../components/Whiteboard";
 
 const WhiteboardPage = () => {
-  return (
-    <MotionWrapper noPadding>
-      <Canvas />
-    </MotionWrapper>
-  );
+  return <Canvas />;
 };
 
 export default WhiteboardPage;
