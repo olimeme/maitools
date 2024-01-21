@@ -20,7 +20,7 @@ const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Flex>
+    <Flex pos={"absolute"} zIndex={1} w={"100%"}>
       <Box p="4">
         <Link to={"/"}>
           <Button variant="ghost">maitools</Button>

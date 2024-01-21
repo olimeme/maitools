@@ -14,7 +14,9 @@ const MotionWrapper = ({
       transition={{ duration: 0.15 }}
       exit={{ opacity: 0, y: 10 }}
     >
-      <Box p={noPadding ? 0 : 4}>{children}</Box>
+      <Box p={4} pt={20}>
+        {children}
+      </Box>
     </motion.div>
   );
 };
