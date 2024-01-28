@@ -22,9 +22,9 @@ const DeckDashboard = ({ cards, view }: DeckDashboardProps) => {
     <>
       {cards.length ? (
         view === "list" ? (
-          <ListView cards={cards} />
+          <ListView items={cards} />
         ) : (
-          <GalleryView cards={cards} />
+          <GalleryView items={cards} />
         )
       ) : (
         <Box color={"grey"} textAlign={"center"} mt={16}>

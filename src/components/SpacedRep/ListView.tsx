@@ -1,22 +1,24 @@
 import { Card, CardBody, Container, Heading } from "@chakra-ui/react";
 import React from "react";
 import MotionWrapper from "../MotionWrapper";
+import SpacedRepDeck from "./SpacedRepDeck";
 
 interface ListViewProps {
-  cards: any;
+  items: any;
 }
 
-const ListView = ({ cards }: ListViewProps) => {
+const ListView = ({ items }: ListViewProps) => {
   return (
     <MotionWrapper duration={0.3}>
       <Container maxW={"2xl"}>
         {/* @ts-ignore */}
-        {cards.map((card, idx) => (
-          <Card mt={4} height={36} key={idx}>
-            <CardBody>
-              <Heading size={"md"}>Deck {idx + 1}</Heading>
-            </CardBody>
-          </Card>
+        {items.map((item, idx) => (
+          <SpacedRepDeck
+            key={idx}
+            idx={idx}
+            item={item}
+            style={{ width: "100%" }}
+          />
         ))}
       </Container>
     </MotionWrapper>

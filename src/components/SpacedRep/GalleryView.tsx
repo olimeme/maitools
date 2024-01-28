@@ -1,23 +1,20 @@
-import { Card, CardBody, Flex, Heading } from "@chakra-ui/react";
+import { Box, Card, CardBody, Center, Flex, Heading } from "@chakra-ui/react";
 import React from "react";
 import NavCard from "../NavCard";
 import MotionWrapper from "../MotionWrapper";
+import SpacedRepDeck from "./SpacedRepDeck";
 
 interface GalleryViewProps {
-  cards: any;
+  items: any;
 }
 
-const GalleryView = ({ cards }: GalleryViewProps) => {
+const GalleryView = ({ items }: GalleryViewProps) => {
   return (
     <MotionWrapper duration={0.3}>
-      <Flex justify={"center"} alignItems="stretch" gap="2" wrap={"wrap"}>
+      <Flex gap={2} wrap="wrap" justifyContent="center">
         {/* @ts-ignore */}
-        {cards.map((card, idx) => (
-          <Card mt={4} width={"sm"} height={48} key={idx}>
-            <CardBody>
-              <Heading size={"md"}>Deck {idx + 1}</Heading>
-            </CardBody>
-          </Card>
+        {items.map((item, idx) => (
+          <SpacedRepDeck key={idx} idx={idx} item={item} />
           // <NavCard key={idx} card={card} />
         ))}
       </Flex>
