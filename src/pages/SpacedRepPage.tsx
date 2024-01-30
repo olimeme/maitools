@@ -47,6 +47,9 @@ const SpacedRepPage = () => {
   }, [currentDeckView]);
 
   const handleCreateDeck = () => {
+    if (inputDeckName === "") {
+      return;
+    }
     const newArr = [...deckList];
     newArr.push({ name: inputDeckName, cards: [] });
     setDeckList(newArr);
