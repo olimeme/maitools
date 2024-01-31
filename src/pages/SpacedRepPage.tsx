@@ -3,6 +3,7 @@ import MotionWrapper from "../components/MotionWrapper";
 import {
   Button,
   ButtonGroup,
+  Heading,
   IconButton,
   Input,
   Modal,
@@ -31,7 +32,7 @@ const SpacedRepPage = () => {
     () =>
       getInitialStateFromLocalStorage(
         "currentDeckView",
-        "list"
+        "gallery"
       ) as DeckViewTypes
   );
   const [inputDeckName, setInputDeckName] = useState<string>("");
@@ -57,6 +58,12 @@ const SpacedRepPage = () => {
     onClose();
   };
 
+  const handleDeleteDeck = (idx: number) => {
+    const newArr = [...deckList];
+    newArr.splice(idx, 1);
+    setDeckList(newArr);
+  };
+
   return (
     <MotionWrapper>
       <ButtonGroup size={"sm"}>
@@ -68,7 +75,7 @@ const SpacedRepPage = () => {
         >
           Add deck
         </Button>
-        <ButtonGroup isAttached size={"sm"}>
+        {/* <ButtonGroup isAttached size={"sm"}>
           <IconButton
             icon={<BsListUl />}
             aria-label="list view"
@@ -85,7 +92,7 @@ const SpacedRepPage = () => {
               setCurrentDeckView("gallery");
             }}
           ></IconButton>
-        </ButtonGroup>
+        </ButtonGroup> */}
         <Button
           onClick={() => {
             setDeckList([]);
@@ -96,7 +103,11 @@ const SpacedRepPage = () => {
           clear
         </Button>
       </ButtonGroup>
-      <DeckDashboard cards={deckList} view={currentDeckView} />
+      <DeckDashboard
+        cards={deckList}
+        view={currentDeckView}
+        handleDeleteDeck={handleDeleteDeck}
+      />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -104,11 +115,18 @@ const SpacedRepPage = () => {
           <ModalHeader>Add deck</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Text>Deck name:</Text>
+            <Heading size={"sm"}>Deck name:</Heading>
+            <Heading size={"xs"} color={"grey"} my={2}>
+              This is where your cards are going to be stored.
+            </Heading>
             <Input
               type="text"
               value={inputDeckName}
+              autoFocus
               onChange={(val) => setInputDeckName(val.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleCreateDeck();
+              }}
             />
           </ModalBody>
 
