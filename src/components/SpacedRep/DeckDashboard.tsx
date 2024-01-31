@@ -10,21 +10,27 @@ import React from "react";
 import { DeckViewTypes } from "../../pages/SpacedRepPage";
 import GalleryView from "./GalleryView";
 import ListView from "./ListView";
+import MotionWrapper from "../MotionWrapper";
 
 interface DeckDashboardProps {
   //TODO: change to type
   cards: any;
   view: DeckViewTypes;
+  handleDeleteDeck: (idx: number) => void;
 }
 
-const DeckDashboard = ({ cards, view }: DeckDashboardProps) => {
+const DeckDashboard = ({
+  cards,
+  view,
+  handleDeleteDeck,
+}: DeckDashboardProps) => {
   return (
     <>
       {cards.length ? (
         view === "list" ? (
-          <ListView items={cards} />
+          <ListView items={cards} handleDeleteDeck={handleDeleteDeck} />
         ) : (
-          <GalleryView items={cards} />
+          <GalleryView items={cards} handleDeleteDeck={handleDeleteDeck} />
         )
       ) : (
         <Box color={"grey"} textAlign={"center"} mt={16}>
