@@ -21,6 +21,7 @@ import {
 import React from "react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
+import PopoverDeleteButton from "../PopoverDeleteButton";
 
 export interface SpacedRepDeckProps extends ChakraStyledOptions {
   idx: number;
@@ -60,41 +61,16 @@ const SpacedRepDeck = ({
               </Box>
             </Link>
             <Box flex={1}>
-              <Popover
+              <PopoverDeleteButton
+                handleDelete={() => {
+                  handleDeleteDeck(idx);
+                  onClose();
+                }}
                 isOpen={isOpen}
                 onOpen={onOpen}
                 onClose={onClose}
-                closeOnEsc
-              >
-                <PopoverTrigger>
-                  <IconButton
-                    size={"xs"}
-                    aria-label="delete"
-                    float={"right"}
-                    icon={<DeleteIcon />}
-                  />
-                </PopoverTrigger>
-                <PopoverContent>
-                  <PopoverHeader>
-                    Are you sure you want to delete the deck?
-                  </PopoverHeader>
-                  <PopoverBody>
-                    <Button
-                      colorScheme="red"
-                      mr={2}
-                      onClick={() => {
-                        handleDeleteDeck(idx);
-                        onClose();
-                      }}
-                    >
-                      Delete
-                    </Button>
-                    <Button variant={"ghost"} onClick={onClose}>
-                      Cancel
-                    </Button>
-                  </PopoverBody>
-                </PopoverContent>
-              </Popover>
+              />
+
             </Box>
           </Flex>
         </CardBody>
