@@ -67,12 +67,7 @@ const SpacedRepPage = () => {
   return (
     <MotionWrapper>
       <ButtonGroup size={"sm"}>
-        <Button
-          leftIcon={<AddIcon />}
-          variant={"ghost"}
-          size={"sm"}
-          onClick={onOpen}
-        >
+        <Button leftIcon={<AddIcon />} size={"sm"} onClick={onOpen}>
           Add deck
         </Button>
         {/* <ButtonGroup isAttached size={"sm"}>
