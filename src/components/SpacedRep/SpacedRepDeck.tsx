@@ -44,7 +44,7 @@ const SpacedRepDeck = ({
     <>
       <Card mt={4} w={"sm"} minH={36} key={idx} style={style} {...rest}>
         <CardBody>
-          <Flex justifyContent={"space-between"}>
+          <Flex justifyContent={"space-between"} gap={4}>
             <Link
               as={ReactRouterLink}
               to={`/spaced-repetition/${idx}`}
@@ -70,7 +70,6 @@ const SpacedRepDeck = ({
                 onOpen={onOpen}
                 onClose={onClose}
               />
-
             </Box>
           </Flex>
         </CardBody>
