@@ -1,6 +1,6 @@
 export default interface ISpacedRepetitionCard {
   id: number;
   question: string;
-  answer: string;
+  answer?: string;
   interval: number;
 }
