@@ -40,7 +40,7 @@ const LandingPage = () => {
           mt={"36"}
         >
           {landingPageCardItems.map((card, idx) => (
-            <NavCard key={idx} card={card} />
+            <NavCard key={card.id} card={card} />
           ))}
         </Flex>
       </Container>
