@@ -1,4 +1,4 @@
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -9,19 +9,21 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { DarkModeSwitch } from "./DarkMode";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PomodoroTimerContext } from "../contexts/PomodoroTimerContext";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import NavigationDrawer from "./Drawer/NavigationDrawer";
+import useNavbarLoginStatus from "../hooks/useNavbarLoginStatus";
 const Navbar = () => {
   const {
     data: { displayTimeRemaining, isPomodoroPageOpen, isActive },
   } = useContext(PomodoroTimerContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isLoggedIn, logout } = useNavbarLoginStatus();
 
   return (
-    <Flex pos={"absolute"} zIndex={1} w={"100%"}>
-      <Box p="4">
+    <Flex pos={"absolute"} zIndex={1} w={"100%"} p={4} gap={4}>
+      <Box>
         <Link to={"/"}>
           <Button variant="ghost">maitools</Button>
         </Link>
@@ -29,7 +31,7 @@ const Navbar = () => {
       <Spacer />
       {!isPomodoroPageOpen && isActive && (
         <Tooltip label={"Pomodoro timer"} fontSize={"md"}>
-          <Box py="4">
+          <Box>
             <Link to={"/pomodoro-timer"}>
               <Button variant={"ghost"}>
                 <Text>{displayTimeRemaining}</Text>
@@ -38,17 +40,25 @@ const Navbar = () => {
           </Box>
         </Tooltip>
       )}
-      <Box p="4">
+      <Box>
         <Button
           variant={"ghost"}
           onClick={onOpen}
-          mr={4}
           rightIcon={<HamburgerIcon />}
         >
           tools
         </Button>
         <NavigationDrawer onClose={onClose} isOpen={isOpen} />
-        <DarkModeSwitch />
+      </Box>
+      <DarkModeSwitch />
+      <Box>
+        {isLoggedIn ? (
+          <Button onClick={() => logout()}>Logout</Button>
+        ) : (
+          <Link to={"/login"}>
+            <Button>Login</Button>
+          </Link>
+        )}
       </Box>
     </Flex>
   );
