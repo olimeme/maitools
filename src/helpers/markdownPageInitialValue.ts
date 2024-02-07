@@ -1,6 +1,4 @@
-export const markdownPageInitialValue = `# A demo of ${`react-markdown`}
-
-${`react-markdown`} is a markdown component for React.
+export const markdownPageInitialValue = `# A demo of ${`markdown`}
 
 👉 Changes are re-rendered as you type.
 
@@ -56,11 +54,6 @@ https://example.com
 ## Components
 
 You can pass components to change things:
-
-## More info?
-
-Much more info is available in the
-[readme on GitHub](https://github.com/remarkjs/react-markdown)!
 
 ***
 
