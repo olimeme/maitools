@@ -22,8 +22,8 @@ const Navbar = () => {
   const { isLoggedIn, logout } = useNavbarLoginStatus();
 
   return (
-    <Flex pos={"absolute"} zIndex={1} w={"100%"}>
-      <Box p="4">
+    <Flex pos={"absolute"} zIndex={1} w={"100%"} p={4} gap={4}>
+      <Box>
         <Link to={"/"}>
           <Button variant="ghost">maitools</Button>
         </Link>
@@ -44,22 +44,19 @@ const Navbar = () => {
         <Button
           variant={"ghost"}
           onClick={onOpen}
-          mr={4}
           rightIcon={<HamburgerIcon />}
         >
           tools
         </Button>
         <NavigationDrawer onClose={onClose} isOpen={isOpen} />
-        <DarkModeSwitch />
       </Box>
+      <DarkModeSwitch />
       <Box>
         {isLoggedIn ? (
-          <Button variant={"ghost"} onClick={() => logout()}>
-            Logout
-          </Button>
+          <Button onClick={() => logout()}>Logout</Button>
         ) : (
           <Link to={"/login"}>
-            <Button variant={"ghost"}>Login</Button>
+            <Button>Login</Button>
           </Link>
         )}
       </Box>
