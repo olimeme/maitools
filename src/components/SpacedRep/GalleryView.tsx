@@ -3,10 +3,11 @@ import MotionWrapper from "../MotionWrapper";
 import SpacedRepDeck from "./SpacedRepDeck";
 import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
 import AnimateBlockPresence from "../AnimateBlockPresence";
+import { ISpacedRepetitionDeck } from "../../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
 
 interface GalleryViewProps {
-  items: any;
-  handleDeleteDeck: (idx: number) => void;
+  items: ISpacedRepetitionDeck[];
+  handleDeleteDeck: (idx: string) => void;
 }
 
 const GalleryView = ({ items, handleDeleteDeck }: GalleryViewProps) => {
@@ -16,7 +17,6 @@ const GalleryView = ({ items, handleDeleteDeck }: GalleryViewProps) => {
     <MotionWrapper duration={0.3}>
       <Flex gap={8} wrap="wrap" justifyContent="center">
         {/* <AnimateBlockPresence> */}
-        {/* @ts-ignore */}
         {items.map((item, idx) => (
           <SpacedRepDeck
             key={idx}

@@ -11,12 +11,12 @@ import { DeckViewTypes } from "../../pages/SpacedRepPage";
 import GalleryView from "./GalleryView";
 import ListView from "./ListView";
 import MotionWrapper from "../MotionWrapper";
+import { ISpacedRepetitionDeck } from "../../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
 
 interface DeckDashboardProps {
-  //TODO: change to type
-  cards: any;
+  cards: ISpacedRepetitionDeck[];
   view: DeckViewTypes;
-  handleDeleteDeck: (idx: number) => void;
+  handleDeleteDeck: (idx: string) => void;
 }
 
 const DeckDashboard = ({

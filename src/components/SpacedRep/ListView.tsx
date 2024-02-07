@@ -5,10 +5,11 @@ import SpacedRepDeck from "./SpacedRepDeck";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimateBlockPresence from "../AnimateBlockPresence";
 import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
+import { ISpacedRepetitionDeck } from "../../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
 
 interface ListViewProps {
-  items: any;
-  handleDeleteDeck: (idx: number) => void;
+  items: ISpacedRepetitionDeck[];
+  handleDeleteDeck: (idx: string) => void;
 }
 
 const ListView = ({ items, handleDeleteDeck }: ListViewProps) => {
@@ -17,11 +18,10 @@ const ListView = ({ items, handleDeleteDeck }: ListViewProps) => {
     <MotionWrapper duration={0.3}>
       <Container maxW={"2xl"}>
         {/* <AnimateBlockPresence> */}
-        {/* @ts-ignore */}
         {items.map((item, idx) => (
           <SpacedRepDeck
-            key={idx}
-            idx={idx}
+            key={item._id}
+            idx={item._id}
             item={item}
             mt={8}
             w={"100%"}
