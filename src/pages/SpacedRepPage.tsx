@@ -23,14 +23,16 @@ import { RxDashboard } from "react-icons/rx";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
 import AuthService from "../services/AuthService";
 import CheckAuth from "./CheckAuth";
+import SpacedRepService from "../services/SpacedRepService";
+import { ISpacedRepetitionDeck } from "../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
+import useCustomToast from "../hooks/useCustomToast";
 
 export type DeckViewTypes = "list" | "gallery";
 
 const SpacedRepPage = () => {
-  const [deckList, setDeckList] = useState<Array<any>>(
-    () => getInitialStateFromLocalStorage("deckList", []) as Array<any>
-  );
-
+  const [loading, setLoading] = useState<boolean>(true);
+  const [deckList, setDeckList] = useState<Array<ISpacedRepetitionDeck>>([]);
+  const customToast = useCustomToast();
   const [currentDeckView, setCurrentDeckView] = useState<DeckViewTypes>(
     () =>
       getInitialStateFromLocalStorage(
@@ -43,35 +45,76 @@ const SpacedRepPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    localStorage.setItem("deckList", JSON.stringify(deckList));
-  }, [deckList]);
+    handleFetchDeckList();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("currentDeckView", JSON.stringify(currentDeckView));
   }, [currentDeckView]);
 
+  const handleFetchDeckList = () => {
+    setLoading(true);
+    SpacedRepService.getDeckList()
+      .then(({ decks }) => {
+        setDeckList(decks);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   const handleCreateDeck = () => {
     if (inputDeckName === "") {
       return;
     }
-    const newArr = [...deckList];
-    newArr.push({ name: inputDeckName, cards: [] });
-    setDeckList(newArr);
-    setInputDeckName("");
-    onClose();
+    setLoading(true);
+    SpacedRepService.createDeck(inputDeckName)
+      .then(({ deck, message }) => {
+        const newArr = [...deckList, deck];
+        setDeckList(newArr);
+        onClose();
+        customToast(message, "", "success");
+      })
+      .catch((err) => {
+        customToast(err, "", "error");
+      })
+      .finally(() => {
+        handleFetchDeckList();
+        setLoading(false);
+        setInputDeckName("");
+      });
   };
 
-  const handleDeleteDeck = (idx: number) => {
-    const newArr = [...deckList];
-    newArr.splice(idx, 1);
-    setDeckList(newArr);
+  const handleDeleteDeck = (idx: string) => {
+    setLoading(true);
+    SpacedRepService.deleteDeck(idx)
+      .then(({ message }) => {
+        customToast(message, "", "warning");
+        onClose();
+      })
+      .catch((err) => {
+        customToast(err, "", "error");
+      })
+      .finally(() => {
+        handleFetchDeckList();
+        setLoading(false);
+        setInputDeckName("");
+      });
   };
 
   return (
     <MotionWrapper>
       <CheckAuth>
         <ButtonGroup size={"sm"}>
-          <Button leftIcon={<AddIcon />} size={"sm"} onClick={onOpen}>
+          <Button
+            leftIcon={<AddIcon />}
+            size={"sm"}
+            onClick={onOpen}
+            isLoading={loading}
+          >
             Add deck
           </Button>
           {/* <ButtonGroup isAttached size={"sm"}>
@@ -92,15 +135,6 @@ const SpacedRepPage = () => {
             }}
           ></IconButton>
         </ButtonGroup> */}
-          <Button
-            onClick={() => {
-              setDeckList([]);
-              localStorage.removeItem("deckList");
-              localStorage.removeItem("currentDeckView");
-            }}
-          >
-            clear
-          </Button>
         </ButtonGroup>
         <DeckDashboard
           cards={deckList}
@@ -130,10 +164,10 @@ const SpacedRepPage = () => {
             </ModalBody>
 
             <ModalFooter>
-              <Button mr={3} onClick={handleCreateDeck}>
+              <Button isLoading={loading} mr={3} onClick={handleCreateDeck}>
                 Add
               </Button>
-              <Button variant="ghost" onClick={onClose}>
+              <Button isLoading={loading} variant="ghost" onClick={onClose}>
                 Close
               </Button>
             </ModalFooter>

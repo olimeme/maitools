@@ -15,13 +15,12 @@ class AuthService {
 
   static async login(data: LoginData) {
     try {
-      console.log(this.baseURL);
       const response = await axios.post(
         `https://maitools.onrender.com/login`,
         data
       );
       if (response.status === 200) {
-        this.setToken(response.data.accessToken);
+        this.setToken(response.data.user.token);
         this.setCredentials(response.data.user);
         return Promise.resolve(response);
       }
