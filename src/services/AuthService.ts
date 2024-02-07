@@ -15,7 +15,36 @@ class AuthService {
 
   static async login(data: LoginData) {
     try {
-      const response = await axios.post(`${this.baseURL}/login`, data);
+      console.log(this.baseURL);
+      const response = await axios.post(
+        `https://maitools.onrender.com/login`,
+        data
+      );
+      if (response.status === 200) {
+        this.setToken(response.data.accessToken);
+        this.setCredentials(response.data.user);
+        return Promise.resolve(response);
+      }
+    } catch (error: any) {
+      const message = error.response?.data?.message;
+      if (message) {
+        return Promise.reject(message);
+      }
+      const defaultErr = error.response?.data?.statusText;
+      if (defaultErr) {
+        return Promise.reject(defaultErr);
+      } else {
+        return Promise.reject("Server Error");
+      }
+    }
+  }
+
+  static async register(data: LoginData) {
+    try {
+      const response = await axios.post(
+        `https://maitools.onrender.com/register`,
+        data
+      );
       if (response.status === 200) {
         this.setToken(response.data.accessToken);
         this.setCredentials(response.data.user);
