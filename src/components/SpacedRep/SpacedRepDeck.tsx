@@ -15,6 +15,7 @@ import {
   Link,
   Spacer,
   Text,
+  Tooltip,
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -98,7 +99,24 @@ const SpacedRepDeck = ({
             >
               <Button variant={"ghost"}>View deck</Button>
             </Link>
-            <Button rightIcon={<ArrowRightIcon />}>Start session</Button>
+
+            {item.cards.length === 0 ? (
+              <Tooltip label="Deck is empty!" bg="grey">
+                <Button
+                  rightIcon={<ArrowRightIcon />}
+                  isDisabled={item.cards.length === 0}
+                >
+                  Start session
+                </Button>
+              </Tooltip>
+            ) : (
+              <Button
+                rightIcon={<ArrowRightIcon />}
+                isDisabled={item.cards.length === 0}
+              >
+                Start session
+              </Button>
+            )}
           </ButtonGroup>
         </CardFooter>
       </Card>
