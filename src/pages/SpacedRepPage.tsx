@@ -4,7 +4,6 @@ import {
   Button,
   ButtonGroup,
   Heading,
-  IconButton,
   Input,
   Modal,
   ModalBody,
@@ -13,15 +12,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import DeckDashboard from "../components/SpacedRep/DeckDashboard";
 import { AddIcon } from "@chakra-ui/icons";
-import { BsListUl } from "react-icons/bs";
-import { RxDashboard } from "react-icons/rx";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
-import AuthService from "../services/AuthService";
 import CheckAuth from "./CheckAuth";
 import SpacedRepService from "../services/SpacedRepService";
 import { ISpacedRepetitionDeck } from "../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
@@ -59,7 +54,7 @@ const SpacedRepPage = () => {
         setDeckList(decks);
       })
       .catch((err) => {
-        console.log(err);
+        customToast(err, "", "error");
       })
       .finally(() => {
         setLoading(false);
@@ -93,13 +88,31 @@ const SpacedRepPage = () => {
     SpacedRepService.deleteDeck(idx)
       .then(({ message }) => {
         customToast(message, "", "warning");
+        const filteredDeck = deckList.filter((deck) => deck._id !== idx);
+        setDeckList(filteredDeck);
         onClose();
       })
       .catch((err) => {
         customToast(err, "", "error");
       })
       .finally(() => {
-        handleFetchDeckList();
+        setLoading(false);
+        setInputDeckName("");
+      });
+  };
+
+  const handleEditDeck = (deckName: string, id: string) => {
+    const curName = deckList.find((deck) => deck._id === id)?.deckName;
+    if (deckName === curName) return;
+    setLoading(true);
+    SpacedRepService.editDeck(id, deckName)
+      .then(({ message }) => {
+        customToast(message, "", "success");
+      })
+      .catch((err) => {
+        customToast(err, "", "error");
+      })
+      .finally(() => {
         setLoading(false);
         setInputDeckName("");
       });
@@ -117,31 +130,14 @@ const SpacedRepPage = () => {
           >
             Add deck
           </Button>
-          {/* <ButtonGroup isAttached size={"sm"}>
-          <IconButton
-            icon={<BsListUl />}
-            aria-label="list view"
-            variant={currentDeckView === "list" ? "solid" : "ghost"}
-            onClick={() => {
-              setCurrentDeckView("list");
-            }}
-          ></IconButton>
-          <IconButton
-            icon={<RxDashboard />}
-            aria-label="gallery view"
-            variant={currentDeckView === "gallery" ? "solid" : "ghost"}
-            onClick={() => {
-              setCurrentDeckView("gallery");
-            }}
-          ></IconButton>
-        </ButtonGroup> */}
         </ButtonGroup>
         <DeckDashboard
           cards={deckList}
+          loading={loading}
           view={currentDeckView}
           handleDeleteDeck={handleDeleteDeck}
+          handleEditDeck={handleEditDeck}
         />
-
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
           <ModalContent>

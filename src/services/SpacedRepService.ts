@@ -63,6 +63,27 @@ class SpacedRepService {
       }
     }
   }
+
+  static async editDeck(deckId: string, deckName: string) {
+    try {
+      const response = await authAxios.put(`${this.baseURL}/update-deck`, {
+        deckId,
+        deckName,
+      });
+      return Promise.resolve(response.data);
+    } catch (error: any) {
+      const message = error.response?.data?.message;
+      if (message) {
+        return Promise.reject(message);
+      }
+      const defaultErr = error.response?.data?.statusText;
+      if (defaultErr) {
+        return Promise.reject(defaultErr);
+      } else {
+        return Promise.reject("Server Error");
+      }
+    }
+  }
 }
 
 export default SpacedRepService;
