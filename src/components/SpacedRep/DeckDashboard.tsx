@@ -38,17 +38,17 @@ const DeckDashboard = ({
   else
     return (
       <>
-        {cards.length &&
+        <GalleryView
+          loading={loading}
+          items={cards}
+          handleDeleteDeck={handleDeleteDeck}
+          handleEditDeck={handleEditDeck}
+        />
+        {/* {cards.length &&
           (view === "list" ? (
             <ListView items={cards} handleDeleteDeck={handleDeleteDeck} />
           ) : (
-            <GalleryView
-              loading={loading}
-              items={cards}
-              handleDeleteDeck={handleDeleteDeck}
-              handleEditDeck={handleEditDeck}
-            />
-          ))}
+          ))} */}
       </>
     );
 };
