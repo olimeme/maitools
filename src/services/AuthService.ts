@@ -1,5 +1,6 @@
 import axios from "axios";
 import { CookieManager } from "../helpers/CookieManager";
+import authAxios from "../helpers/authAxios";
 
 export interface LoginData {
   email: string;
@@ -15,10 +16,7 @@ class AuthService {
 
   static async login(data: LoginData) {
     try {
-      const response = await axios.post(
-        `https://maitools.onrender.com/login`,
-        data
-      );
+      const response = await authAxios.post(`/login`, data);
       if (response.status === 200) {
         this.setToken(response.data.user.token);
         this.setCredentials(response.data.user);
@@ -40,10 +38,7 @@ class AuthService {
 
   static async register(data: LoginData) {
     try {
-      const response = await axios.post(
-        `https://maitools.onrender.com/register`,
-        data
-      );
+      const response = await axios.post(`/register`, data);
       if (response.status === 200) {
         this.setToken(response.data.accessToken);
         this.setCredentials(response.data.user);

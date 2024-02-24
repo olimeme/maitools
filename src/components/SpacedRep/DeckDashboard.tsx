@@ -44,11 +44,6 @@ const DeckDashboard = ({
           handleDeleteDeck={handleDeleteDeck}
           handleEditDeck={handleEditDeck}
         />
-        {/* {cards.length &&
-          (view === "list" ? (
-            <ListView items={cards} handleDeleteDeck={handleDeleteDeck} />
-          ) : (
-          ))} */}
       </>
     );
 };

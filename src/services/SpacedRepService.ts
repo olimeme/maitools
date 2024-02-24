@@ -1,14 +1,12 @@
-import axios from "axios";
 import authAxios from "../helpers/authAxios";
 import { CookieManager } from "../helpers/CookieManager";
 import { ISpacedRepetitionDeck } from "../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
 
 class SpacedRepService {
-  static baseURL = "https://maitools.onrender.com/spaced-rep";
 
   static async getDeckList() {
     try {
-      const response = await authAxios.get(`${this.baseURL}/get-deck`);
+      const response = await authAxios.get(`/spaced-rep/get-deck`);
       return Promise.resolve(response.data);
     } catch (error: any) {
       const message = error.response?.data?.message;
@@ -26,7 +24,7 @@ class SpacedRepService {
 
   static async createDeck(data: string) {
     try {
-      const response = await authAxios.post(`${this.baseURL}/create-deck`, {
+      const response = await authAxios.post(`/spaced-rep/create-deck`, {
         deckName: data,
       });
       return Promise.resolve(response.data);
@@ -46,7 +44,7 @@ class SpacedRepService {
 
   static async deleteDeck(deckId: string) {
     try {
-      const response = await authAxios.delete(`${this.baseURL}/delete-deck`, {
+      const response = await authAxios.delete(`/spaced-rep/delete-deck`, {
         data: { deckId },
       });
       return Promise.resolve(response.data);
@@ -66,7 +64,7 @@ class SpacedRepService {
 
   static async editDeck(deckId: string, deckName: string) {
     try {
-      const response = await authAxios.put(`${this.baseURL}/update-deck`, {
+      const response = await authAxios.put(`/spaced-rep/update-deck`, {
         deckId,
         deckName,
       });

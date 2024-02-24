@@ -142,7 +142,7 @@ const DeckPage = ({}: DeckPageProps) => {
       <ButtonGroup size={"sm"}>
         <BackButton to="/spaced-repetition/" size={"sm"} />
         <Button leftIcon={<AddIcon />} size={"sm"} onClick={onOpen}>
-          Add deck
+          Add card
         </Button>
       </ButtonGroup>
       <Container w={"md"}>
