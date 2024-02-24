@@ -16,7 +16,10 @@ class AuthService {
 
   static async login(data: LoginData) {
     try {
-      const response = await authAxios.post(`/login`, data);
+      const response = await authAxios.post(
+        `https://maitools.onrender.com/login`,
+        data
+      );
       if (response.status === 200) {
         this.setToken(response.data.user.token);
         this.setCredentials(response.data.user);
