@@ -38,7 +38,6 @@ const GalleryView = ({
               ),
             }}
           />
-          // <NavCard key={idx} card={card} />
         ))}
         {/* </AnimateBlockPresence> */}
       </Flex>

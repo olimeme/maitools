@@ -11,7 +11,7 @@ class AuthService {
   static baseURL = import.meta.env.VITE_API_BASE_URL;
 
   static isLoggedIn() {
-    return !!localStorage.getItem("user");
+    return !!CookieManager.getCookie("token");
   }
 
   static async login(data: LoginData) {

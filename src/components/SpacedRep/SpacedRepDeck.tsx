@@ -57,7 +57,11 @@ const SpacedRepDeck = ({
                 submitOnBlur={false}
                 isDisabled={loading}
               >
-                <EditablePreview fontSize={"xl"} overflowWrap={"anywhere"} />
+                <EditablePreview
+                  fontSize={"xl"}
+                  overflowWrap={"anywhere"}
+                  width="full"
+                />
                 <EditableInput fontSize={"xl"} />
               </Editable>
               {/* <Heading size={"md"} overflowWrap={"anywhere"}>
