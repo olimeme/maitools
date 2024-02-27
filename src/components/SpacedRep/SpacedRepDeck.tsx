@@ -24,12 +24,11 @@ import { Link as ReactRouterLink } from "react-router-dom";
 import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
 import PopoverDeleteButton from "../PopoverDeleteButton";
 import { ISpacedRepetitionDeck } from "../../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
+import { useSpacedRepContext } from "../../contexts/SpacedRepContext";
 
 export interface SpacedRepDeckProps extends ChakraStyledOptions {
   item: ISpacedRepetitionDeck;
   loading: boolean;
-  handleDeleteDeck: (idx: string) => void;
-  handleEditDeck: (deckName: string, id: string) => void;
   style?: React.CSSProperties;
 }
 
@@ -37,12 +36,11 @@ const SpacedRepDeck = ({
   item,
   style,
   loading,
-  handleDeleteDeck,
-  handleEditDeck,
   ...rest
 }: SpacedRepDeckProps) => {
   const { changeColorBasedOnTheme } = useDarkModeChecker();
   const { onOpen, onClose, isOpen } = useDisclosure();
+  const { handleEditDeck, handleDeleteDeck } = useSpacedRepContext();
   return (
     <>
       <Card mt={4} w={"sm"} minH={36} style={style} {...rest}>

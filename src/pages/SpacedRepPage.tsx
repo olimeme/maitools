@@ -21,6 +21,8 @@ import CheckAuth from "./CheckAuth";
 import SpacedRepService from "../services/SpacedRepService";
 import { ISpacedRepetitionDeck } from "../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
 import useCustomToast from "../hooks/useCustomToast";
+import { redirect } from "react-router-dom";
+import { SpacedRepContext } from "../contexts/SpacedRepContext";
 
 export type DeckViewTypes = "list" | "gallery";
 
@@ -55,6 +57,7 @@ const SpacedRepPage = () => {
       })
       .catch((err) => {
         customToast(err, "", "error");
+        return redirect("/login");
       })
       .finally(() => {
         setLoading(false);
@@ -83,12 +86,12 @@ const SpacedRepPage = () => {
       });
   };
 
-  const handleDeleteDeck = (idx: string) => {
+  const handleDeleteDeck = (deckId: string) => {
     setLoading(true);
-    SpacedRepService.deleteDeck(idx)
+    SpacedRepService.deleteDeck(deckId)
       .then(({ message }) => {
         customToast(message, "", "warning");
-        const filteredDeck = deckList.filter((deck) => deck._id !== idx);
+        const filteredDeck = deckList.filter((deck) => deck._id !== deckId);
         setDeckList(filteredDeck);
         onClose();
       })
@@ -121,54 +124,62 @@ const SpacedRepPage = () => {
   return (
     <MotionWrapper>
       <CheckAuth>
-        <ButtonGroup size={"sm"}>
-          <Button
-            leftIcon={<AddIcon />}
-            size={"sm"}
-            onClick={onOpen}
-            isLoading={loading}
-          >
-            Add deck
-          </Button>
-        </ButtonGroup>
-        <DeckDashboard
-          cards={deckList}
-          loading={loading}
-          view={currentDeckView}
-          handleDeleteDeck={handleDeleteDeck}
-          handleEditDeck={handleEditDeck}
-        />
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Add deck</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody>
-              <Heading size={"sm"}>Deck name:</Heading>
-              <Heading size={"xs"} color={"grey"} my={2}>
-                This is where your cards are going to be stored.
-              </Heading>
-              <Input
-                type="text"
-                value={inputDeckName}
-                autoFocus
-                onChange={(val) => setInputDeckName(val.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleCreateDeck();
-                }}
-              />
-            </ModalBody>
+        <SpacedRepContext.Provider
+          value={{
+            handleDeleteDeck: handleDeleteDeck,
+            handleEditDeck: handleEditDeck,
+            // handleCreateCard: handleCreateCard,
+            // handleDeleteCards: handleDeleteCards,
+            // handleEditCards: handleEditCards,
+          }}
+        >
+          <ButtonGroup size={"sm"}>
+            <Button
+              leftIcon={<AddIcon />}
+              size={"sm"}
+              onClick={onOpen}
+              isLoading={loading}
+            >
+              Add deck
+            </Button>
+          </ButtonGroup>
+          <DeckDashboard
+            cards={deckList}
+            loading={loading}
+            view={currentDeckView}
+          />
+          <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Add deck</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Heading size={"sm"}>Deck name:</Heading>
+                <Heading size={"xs"} color={"grey"} my={2}>
+                  This is where your cards are going to be stored.
+                </Heading>
+                <Input
+                  type="text"
+                  value={inputDeckName}
+                  autoFocus
+                  onChange={(val) => setInputDeckName(val.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleCreateDeck();
+                  }}
+                />
+              </ModalBody>
 
-            <ModalFooter>
-              <Button isLoading={loading} mr={3} onClick={handleCreateDeck}>
-                Add
-              </Button>
-              <Button isLoading={loading} variant="ghost" onClick={onClose}>
-                Close
-              </Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
+              <ModalFooter>
+                <Button isLoading={loading} mr={3} onClick={handleCreateDeck}>
+                  Add
+                </Button>
+                <Button isLoading={loading} variant="ghost" onClick={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
+        </SpacedRepContext.Provider>
       </CheckAuth>
     </MotionWrapper>
   );

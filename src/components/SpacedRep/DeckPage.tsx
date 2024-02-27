@@ -22,13 +22,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Popover,
-  PopoverBody,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
   Text,
-  VStack,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -37,43 +31,37 @@ import { useNavigation, useParams } from "react-router";
 import MotionWrapper from "../MotionWrapper";
 import BackButton from "../BackButton";
 import { ISpacedRepetitionCard } from "../../interfaces/SpacedRepetition";
-import useSpacedRepetition from "../../hooks/useSpacedRepetition";
-import SpacedRepDeck from "./SpacedRepDeck";
-import AnimateBlockPresence from "../AnimateBlockPresence";
 import { AddIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
-import PopoverDeleteButton from "../PopoverDeleteButton";
 import useCommandHistory from "../../hooks/useCommandHistory";
-import { getInitialStateFromLocalStorage } from "../../helpers/getInitialStateFromLocalStorage";
+import SpacedRepService from "../../services/SpacedRepService";
+import { useSpacedRepContext } from "../../contexts/SpacedRepContext";
 
 export interface DeckPageProps {}
 
 const DeckPage = ({}: DeckPageProps) => {
-  const [cards, setCards] = useState(
-    () =>
-      getInitialStateFromLocalStorage(
-        "cards",
-        [] as Array<ISpacedRepetitionCard>
-      ) as Array<ISpacedRepetitionCard>
-  );
+  const [cards, setCards] = useState([] as ISpacedRepetitionCard[]);
   const [inputCardName, setInputCardName] = useState<string>("");
   const [inputCardAnswer, setInputCardAnswer] = useState<string>("");
   const { id } = useParams<{ id: string }>();
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const { registerAction } = useCommandHistory();
   const { onOpen, onClose, isOpen } = useDisclosure();
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const toast = useToast();
 
   useEffect(() => {
-    localStorage.setItem("card", JSON.stringify(cards));
-  }, [cards]);
+    if (!id) return;
+  }, []);
 
   const undoDelete = (
     newCards: ISpacedRepetitionCard[],
     card: ISpacedRepetitionCard,
-    id: number
+    id: string
   ) => {
-    newCards.splice(id - 1, 0, card);
+    newCards.splice(
+      newCards.findIndex((card) => card._id === id),
+      0,
+      card
+    );
     setCards([...newCards]);
     toast({
       title: "Undone!",
@@ -85,35 +73,39 @@ const DeckPage = ({}: DeckPageProps) => {
   };
 
   const handleCreateCard = () => {
-    if (inputCardName === "") {
-      return;
-    }
-    const newArr = [...cards];
-    const newCard: ISpacedRepetitionCard = {
-      id: cards.length + 1,
-      question: inputCardName,
-      answer: inputCardAnswer,
-      interval: Date.now(),
-    };
-    newArr.push(newCard);
-    setCards(newArr);
-    setInputCardName("");
-    setInputCardAnswer("");
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-    toast({
-      title: "Card added!",
-      status: "success",
-      position: "bottom-right",
-      isClosable: true,
-      duration: 1000,
-    });
+    if (inputCardName === "" || inputCardAnswer === "" || !id) return;
+    SpacedRepService.createCard(id, inputCardName, inputCardAnswer)
+      .then(({ card, message }) => {
+        const newArr = [...cards];
+        newArr.push(card);
+        setCards(newArr);
+        setInputCardName("");
+        setInputCardAnswer("");
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+        toast({
+          title: message,
+          status: "success",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+      })
+      .catch((err) => {
+        toast({
+          title: err,
+          status: "error",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+      });
   };
 
-  const handleDeleteCard = (id: number) => {
-    const card = cards.find((card) => card.id === id);
-    const newCards = cards.filter((card) => card.id !== id);
+  const handleDeleteCard = (id: string) => {
+    const card = cards.find((card) => card._id === id);
+    const newCards = cards.filter((card) => card._id !== id);
     registerAction(
       () => setCards(newCards),
       () => {
@@ -125,14 +117,18 @@ const DeckPage = ({}: DeckPageProps) => {
   };
 
   const handleEditCard = (
-    id: number,
+    id: string,
     nextValue: string,
     property: "question" | "answer"
   ) => {
-    let card = cards.find((card) => card.id === id);
+    let card = cards.find((card) => card._id === id);
     if (!card) return;
     card[property] = nextValue;
-    cards.splice(id - 1, 1, card);
+    cards.splice(
+      cards.findIndex((card) => card._id === id),
+      1,
+      card
+    );
     console.log(cards);
     setCards([...cards]);
   };
@@ -146,14 +142,14 @@ const DeckPage = ({}: DeckPageProps) => {
         </Button>
       </ButtonGroup>
       <Container w={"md"}>
-        {cards.map(({ id, question, answer }) => (
-          <Card mb={4} key={id}>
+        {cards.map(({ _id, question, answer }) => (
+          <Card mb={4} key={_id}>
             <CardHeader>
               <Flex justifyContent={"space-between"}>
                 <Editable
                   defaultValue={question}
                   onSubmit={(nextValue) =>
-                    handleEditCard(id, nextValue, "question")
+                    handleEditCard(_id, nextValue, "question")
                   }
                 >
                   <EditablePreview />
@@ -164,7 +160,7 @@ const DeckPage = ({}: DeckPageProps) => {
                   aria-label="delete"
                   colorScheme="red"
                   icon={<DeleteIcon />}
-                  onClick={() => handleDeleteCard(id)}
+                  onClick={() => handleDeleteCard(_id)}
                 />
               </Flex>
             </CardHeader>
@@ -173,7 +169,7 @@ const DeckPage = ({}: DeckPageProps) => {
               <Editable
                 defaultValue={answer}
                 onSubmit={(nextValue) =>
-                  handleEditCard(id, nextValue, "answer")
+                  handleEditCard(_id, nextValue, "answer")
                 }
               >
                 <EditablePreview />
