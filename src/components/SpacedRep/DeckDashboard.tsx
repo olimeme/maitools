@@ -22,28 +22,15 @@ interface DeckDashboardProps {
   cards: ISpacedRepetitionDeck[];
   view: DeckViewTypes;
   loading: boolean;
-  handleDeleteDeck: (idx: string) => void;
-  handleEditDeck: (deckName: string, id: string) => void;
 }
 
-const DeckDashboard = ({
-  cards,
-  view,
-  loading,
-  handleDeleteDeck,
-  handleEditDeck,
-}: DeckDashboardProps) => {
+const DeckDashboard = ({ cards, view, loading }: DeckDashboardProps) => {
   if (loading && cards.length === 0) return <DashboardLoading />;
   else if (cards.length === 0) return <DashboardNoDecks />;
   else
     return (
       <>
-        <GalleryView
-          loading={loading}
-          items={cards}
-          handleDeleteDeck={handleDeleteDeck}
-          handleEditDeck={handleEditDeck}
-        />
+        <GalleryView loading={loading} items={cards} />
       </>
     );
 };

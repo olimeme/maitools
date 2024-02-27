@@ -36,7 +36,7 @@ class SpacedRepService {
 
   static async createCard(deckId: string, front: string, back: string) {
     return await requestManager(
-      `/spaced-rep/update-deck`,
+      `/spaced-rep/create-card`,
       {
         deckId,
         front,
@@ -44,6 +44,10 @@ class SpacedRepService {
       },
       "post"
     );
+  }
+
+  static async getCards(deckId: string) {
+    return await requestManager(`/spaced-rep/get-cards`, { deckId }, "get");
   }
 }
 

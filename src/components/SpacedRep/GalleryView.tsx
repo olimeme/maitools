@@ -8,16 +8,9 @@ import { ISpacedRepetitionDeck } from "../../interfaces/SpacedRepetition/ISpaced
 interface GalleryViewProps {
   items: ISpacedRepetitionDeck[];
   loading: boolean;
-  handleDeleteDeck: (idx: string) => void;
-  handleEditDeck: (deckName: string, id: string) => void;
 }
 
-const GalleryView = ({
-  items,
-  loading,
-  handleDeleteDeck,
-  handleEditDeck,
-}: GalleryViewProps) => {
+const GalleryView = ({ items, loading }: GalleryViewProps) => {
   const { changeColorBasedOnTheme } = useDarkModeChecker();
 
   return (
@@ -29,8 +22,6 @@ const GalleryView = ({
             key={item._id}
             item={item}
             loading={loading}
-            handleDeleteDeck={handleDeleteDeck}
-            handleEditDeck={handleEditDeck}
             style={{
               boxShadow: changeColorBasedOnTheme(
                 `8px 8px #323232, 16px 16px #242424`,

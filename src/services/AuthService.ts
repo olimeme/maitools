@@ -63,7 +63,7 @@ class AuthService {
   }
 
   static setToken(response: any) {
-    document.cookie = `token=${response}`;
+    CookieManager.setCookie("token", response);
   }
 
   static logout() {
