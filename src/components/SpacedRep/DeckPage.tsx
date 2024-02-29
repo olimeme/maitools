@@ -35,11 +35,13 @@ import { AddIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import useCommandHistory from "../../hooks/useCommandHistory";
 import SpacedRepService from "../../services/SpacedRepService";
 import { useSpacedRepContext } from "../../contexts/SpacedRepContext";
+import DashboardLoading from "./DashboardLoading";
 
 export interface DeckPageProps {}
 
 const DeckPage = ({}: DeckPageProps) => {
   const [cards, setCards] = useState([] as ISpacedRepetitionCard[]);
+  const [loading, setLoading] = useState(false);
   const [inputCardName, setInputCardName] = useState<string>("");
   const [inputCardAnswer, setInputCardAnswer] = useState<string>("");
   const { id } = useParams<{ id: string }>();
@@ -49,7 +51,9 @@ const DeckPage = ({}: DeckPageProps) => {
   const toast = useToast();
 
   useEffect(() => {
+    //maybe throw a toast here
     if (!id) return;
+    fetchCards(id);
   }, []);
 
   const undoDelete = (
@@ -70,6 +74,24 @@ const DeckPage = ({}: DeckPageProps) => {
       isClosable: true,
       duration: 1000,
     });
+  };
+
+  const fetchCards = (id: string) => {
+    setLoading(true);
+    SpacedRepService.getAllCards(id)
+      .then(({ cards }) => {
+        setCards(cards);
+      })
+      .catch((err) => {
+        toast({
+          title: err,
+          status: "error",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleCreateCard = () => {
@@ -119,7 +141,7 @@ const DeckPage = ({}: DeckPageProps) => {
   const handleEditCard = (
     id: string,
     nextValue: string,
-    property: "question" | "answer"
+    property: "front" | "back"
   ) => {
     let card = cards.find((card) => card._id === id);
     if (!card) return;
@@ -133,6 +155,8 @@ const DeckPage = ({}: DeckPageProps) => {
     setCards([...cards]);
   };
 
+  if (loading) return <DashboardLoading />;
+
   return (
     <MotionWrapper>
       <ButtonGroup size={"sm"}>
@@ -142,14 +166,14 @@ const DeckPage = ({}: DeckPageProps) => {
         </Button>
       </ButtonGroup>
       <Container w={"md"}>
-        {cards.map(({ _id, question, answer }) => (
+        {cards.map(({ _id, front, back }) => (
           <Card mb={4} key={_id}>
             <CardHeader>
               <Flex justifyContent={"space-between"}>
                 <Editable
-                  defaultValue={question}
+                  defaultValue={front}
                   onSubmit={(nextValue) =>
-                    handleEditCard(_id, nextValue, "question")
+                    handleEditCard(_id, nextValue, "front")
                   }
                 >
                   <EditablePreview />
@@ -167,10 +191,8 @@ const DeckPage = ({}: DeckPageProps) => {
             <Divider />
             <CardBody>
               <Editable
-                defaultValue={answer}
-                onSubmit={(nextValue) =>
-                  handleEditCard(_id, nextValue, "answer")
-                }
+                defaultValue={back || "No answer yet"}
+                onSubmit={(nextValue) => handleEditCard(_id, nextValue, "back")}
               >
                 <EditablePreview />
                 <EditableInput />

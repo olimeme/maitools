@@ -6,7 +6,10 @@ export const requestManager = async (
   method: "get" | "post" | "update" | "delete" | "put"
 ) => {
   try {
-    const response = await authAxios(url, { data: { ...data }, method });
+    const response = await authAxios(
+      url,
+      method === "get" ? { params: { ...data } } : { data: { ...data }, method }
+    );
     return Promise.resolve(response.data);
   } catch (error: any) {
     const message = error.response?.data?.message;

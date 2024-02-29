@@ -34,11 +34,11 @@ class SpacedRepService {
     );
   }
 
-  static async createCard(deckId: string, front: string, back: string) {
+  static async createCard(cardId: string, front: string, back: string) {
     return await requestManager(
       `/spaced-rep/create-card`,
       {
-        deckId,
+        cardId,
         front,
         back,
       },
@@ -46,8 +46,30 @@ class SpacedRepService {
     );
   }
 
-  static async getCards(deckId: string) {
-    return await requestManager(`/spaced-rep/get-cards`, { deckId }, "get");
+  static async getAllCards(deckId: string) {
+    return await requestManager(`/spaced-rep/get-all-cards`, { deckId }, "get");
+  }
+
+  static async deleteCard(cardId: string) {
+    return await requestManager(
+      `/spaced-rep/delete-card`,
+      {
+        cardId,
+      },
+      "delete"
+    );
+  }
+
+  static async updateCard(cardId: string, front: string, back: string) {
+    return await requestManager(
+      `/spaced-rep/update-card`,
+      {
+        cardId,
+        front,
+        back,
+      },
+      "put"
+    );
   }
 }
 
