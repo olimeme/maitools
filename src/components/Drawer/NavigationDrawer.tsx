@@ -11,7 +11,7 @@ import {
   UseDisclosureReturn,
 } from "@chakra-ui/react";
 import React from "react";
-import { drawerItems } from "../../data/drawerItems";
+// import { drawerItems } from "../../data/drawerItems";
 import DrawerItem from "./DrawerItem";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 
@@ -32,7 +32,7 @@ const NavigationDrawer = ({ isOpen, onClose }: NavigationDrawerProps) => {
       <DrawerOverlay />
       <DrawerContent p={4}>
         <Heading mb={4}>Tools</Heading>
-        {drawerItems.map(({ link, name, id }) => (
+        {/* {drawerItems.map(({ link, name, id }) => (
           <DrawerItem key={id} link={link} mb={2} onClose={onClose}>
             <Flex>
               <Text>{name}</Text>
@@ -40,7 +40,7 @@ const NavigationDrawer = ({ isOpen, onClose }: NavigationDrawerProps) => {
               <ArrowForwardIcon mt={1} />
             </Flex>
           </DrawerItem>
-        ))}
+        ))} */}
       </DrawerContent>
     </Drawer>
   );
