@@ -12,6 +12,7 @@ import {
   EditableInput,
   EditablePreview,
   Flex,
+  Grid,
   Heading,
   IconButton,
   Input,
@@ -22,8 +23,10 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  SimpleGrid,
   Spacer,
   Text,
+  Textarea,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -35,7 +38,6 @@ import { ISpacedRepetitionCard } from "../../interfaces/SpacedRepetition";
 import { AddIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import useCommandHistory from "../../hooks/useCommandHistory";
 import SpacedRepService from "../../services/SpacedRepService";
-import { useSpacedRepContext } from "../../contexts/SpacedRepContext";
 import DashboardLoading from "./DashboardLoading";
 
 export interface DeckPageProps {}
@@ -49,7 +51,7 @@ const DeckPage = ({}: DeckPageProps) => {
   const { id } = useParams<{ id: string }>();
   const { registerAction } = useCommandHistory();
   const { onOpen, onClose, isOpen } = useDisclosure();
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const toast = useToast();
 
   useEffect(() => {
@@ -130,16 +132,29 @@ const DeckPage = ({}: DeckPageProps) => {
   };
 
   const handleDeleteCard = (id: string) => {
-    const card = cards.find((card) => card._id === id);
-    const newCards = cards.filter((card) => card._id !== id);
-    registerAction(
-      () => setCards(newCards),
-      () => {
-        if (!card) return;
-        undoDelete(newCards, card, id);
-      }
-    );
-    setCards(newCards);
+    setLoading(true);
+    SpacedRepService.deleteCard(id)
+      .then(({ message }) => {
+        const newCards = cards.filter((card) => card._id !== id);
+        setCards(newCards);
+        toast({
+          title: message,
+          status: "success",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+      })
+      .catch((err) => {
+        toast({
+          title: err,
+          status: "error",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handelEditFront = (id: string, nextValue: string) => {
@@ -210,15 +225,15 @@ const DeckPage = ({}: DeckPageProps) => {
 
   return (
     <MotionWrapper>
-      <ButtonGroup size={"sm"}>
+      <ButtonGroup size={"sm"} isDisabled={loading}>
         <BackButton to="/spaced-repetition/" size={"sm"} />
         <Button leftIcon={<AddIcon />} size={"sm"} onClick={onOpen}>
           Add card
         </Button>
       </ButtonGroup>
-      <Container w={"md"}>
+      <SimpleGrid columns={[1, 2, 2, 4]} gap={4}>
         {cards.map(({ _id, front, back }) => (
-          <Card mb={4} key={_id}>
+          <Card key={_id}>
             <CardHeader>
               <Flex justifyContent={"space-between"}>
                 <Box flex={11}>
@@ -226,15 +241,8 @@ const DeckPage = ({}: DeckPageProps) => {
                     defaultValue={front || "[No name yet]"}
                     onSubmit={(nextValue) => handelEditFront(_id, nextValue)}
                   >
-                    <EditablePreview
-                      fontSize={"xl"}
-                      overflowWrap={"anywhere"}
-                      width="full"
-                    />
-                    <EditableInput
-                      fontSize={"xl"}
-                      placeholder="maybe enter something?"
-                    />
+                    <EditablePreview overflowWrap={"anywhere"} width="full" />
+                    <EditableInput placeholder="maybe enter something?" />
                   </Editable>
                 </Box>
                 <Spacer />
@@ -243,6 +251,7 @@ const DeckPage = ({}: DeckPageProps) => {
                     size={"xs"}
                     aria-label="delete"
                     colorScheme="red"
+                    isLoading={loading}
                     icon={<DeleteIcon />}
                     onClick={() => handleDeleteCard(_id)}
                   />
@@ -255,23 +264,20 @@ const DeckPage = ({}: DeckPageProps) => {
                 defaultValue={back || "[No answer yet]"}
                 onSubmit={(nextValue) => handleEditBack(_id, nextValue)}
               >
-                <EditablePreview
-                  fontSize={"xl"}
-                  overflowWrap={"anywhere"}
-                  width="full"
-                />
-                <EditableInput fontSize={"xl"} />
+                <EditablePreview overflowWrap={"anywhere"} width="full" />
+                <EditableInput />
               </Editable>
             </CardBody>
           </Card>
         ))}
-        {!id && (
-          <Box color={"grey"} textAlign={"center"} mt={16}>
-            <Heading>No cards found</Heading>
-          </Box>
-        )}
-      </Container>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      </SimpleGrid>
+
+      {!id && (
+        <Box color={"grey"} textAlign={"center"} mt={16}>
+          <Heading>No cards found</Heading>
+        </Box>
+      )}
+      <Modal isOpen={isOpen} onClose={onClose} size={"2xl"} closeOnEsc>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add card</ModalHeader>
@@ -281,25 +287,25 @@ const DeckPage = ({}: DeckPageProps) => {
             <Heading size={"xs"} color={"grey"} my={2}>
               Add a question here
             </Heading>
-            <Input
-              type="text"
+            <Textarea
               value={inputCardName}
               ref={inputRef}
               required
+              onBlur={() => inputRef.current?.focus()}
               onChange={(val) => setInputCardName(val.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleCreateCard();
               }}
             />
-            <Heading size={"sm"} mt={2}>
+            <Heading size={"sm"} mt={4}>
               Back:
             </Heading>
             <Heading size={"xs"} color={"grey"} my={2}>
               You can add an answer here
             </Heading>
-            <Input
-              type="text"
+            <Textarea
               value={inputCardAnswer}
+              required
               onChange={(val) => setInputCardAnswer(val.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") handleCreateCard();
@@ -308,10 +314,10 @@ const DeckPage = ({}: DeckPageProps) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button mr={3} onClick={handleCreateCard}>
+            <Button mr={3} onClick={handleCreateCard} isLoading={loading}>
               Add
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" onClick={onClose} isLoading={loading}>
               Close
             </Button>
           </ModalFooter>
