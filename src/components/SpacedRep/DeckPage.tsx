@@ -22,6 +22,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Spacer,
   Text,
   useDisclosure,
   useToast,
@@ -41,6 +42,7 @@ export interface DeckPageProps {}
 
 const DeckPage = ({}: DeckPageProps) => {
   const [cards, setCards] = useState([] as ISpacedRepetitionCard[]);
+  const [pageLoading, setPageLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [inputCardName, setInputCardName] = useState<string>("");
   const [inputCardAnswer, setInputCardAnswer] = useState<string>("");
@@ -77,7 +79,7 @@ const DeckPage = ({}: DeckPageProps) => {
   };
 
   const fetchCards = (id: string) => {
-    setLoading(true);
+    setPageLoading(true);
     SpacedRepService.getAllCards(id)
       .then(({ cards }) => {
         setCards(cards);
@@ -91,11 +93,12 @@ const DeckPage = ({}: DeckPageProps) => {
           duration: 1000,
         });
       })
-      .finally(() => setLoading(false));
+      .finally(() => setPageLoading(false));
   };
 
   const handleCreateCard = () => {
     if (inputCardName === "" || inputCardAnswer === "" || !id) return;
+    setLoading(true);
     SpacedRepService.createCard(id, inputCardName, inputCardAnswer)
       .then(({ card, message }) => {
         const newArr = [...cards];
@@ -122,7 +125,8 @@ const DeckPage = ({}: DeckPageProps) => {
           isClosable: true,
           duration: 1000,
         });
-      });
+      })
+      .finally(() => setLoading(false));
   };
 
   const handleDeleteCard = (id: string) => {
@@ -138,24 +142,71 @@ const DeckPage = ({}: DeckPageProps) => {
     setCards(newCards);
   };
 
-  const handleEditCard = (
-    id: string,
-    nextValue: string,
-    property: "front" | "back"
-  ) => {
+  const handelEditFront = (id: string, nextValue: string) => {
     let card = cards.find((card) => card._id === id);
     if (!card) return;
-    card[property] = nextValue;
-    cards.splice(
-      cards.findIndex((card) => card._id === id),
-      1,
-      card
-    );
-    console.log(cards);
-    setCards([...cards]);
+    if (nextValue === card.front) return;
+
+    setLoading(true);
+    SpacedRepService.updateCard(id, nextValue, card.back)
+      .then(({ message, card }) => {
+        toast({
+          title: message,
+          status: "success",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+        const newCards = cards.map((c) => (c._id === id ? card : c));
+        setCards(newCards);
+      })
+      .catch((err) => {
+        toast({
+          title: err,
+          status: "error",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  if (loading) return <DashboardLoading />;
+  const handleEditBack = (id: string, nextValue: string) => {
+    let card = cards.find((card) => card._id === id);
+    if (!card) return;
+    if (nextValue === card.back) return;
+
+    setLoading(true);
+    SpacedRepService.updateCard(id, card.front, nextValue)
+      .then(({ message, card }) => {
+        toast({
+          title: message,
+          status: "success",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+        const newCards = cards.map((c) => (c._id === id ? card : c));
+        setCards(newCards);
+      })
+      .catch((err) => {
+        toast({
+          title: err,
+          status: "error",
+          position: "bottom-right",
+          isClosable: true,
+          duration: 1000,
+        });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  if (pageLoading) return <DashboardLoading />;
 
   return (
     <MotionWrapper>
@@ -170,43 +221,53 @@ const DeckPage = ({}: DeckPageProps) => {
           <Card mb={4} key={_id}>
             <CardHeader>
               <Flex justifyContent={"space-between"}>
-                <Editable
-                  defaultValue={front}
-                  onSubmit={(nextValue) =>
-                    handleEditCard(_id, nextValue, "front")
-                  }
-                >
-                  <EditablePreview />
-                  <EditableInput />
-                </Editable>
-                <IconButton
-                  size={"xs"}
-                  aria-label="delete"
-                  colorScheme="red"
-                  icon={<DeleteIcon />}
-                  onClick={() => handleDeleteCard(_id)}
-                />
+                <Box flex={11}>
+                  <Editable
+                    defaultValue={front || "[No name yet]"}
+                    onSubmit={(nextValue) => handelEditFront(_id, nextValue)}
+                  >
+                    <EditablePreview
+                      fontSize={"xl"}
+                      overflowWrap={"anywhere"}
+                      width="full"
+                    />
+                    <EditableInput
+                      fontSize={"xl"}
+                      placeholder="maybe enter something?"
+                    />
+                  </Editable>
+                </Box>
+                <Spacer />
+                <Box flex={1}>
+                  <IconButton
+                    size={"xs"}
+                    aria-label="delete"
+                    colorScheme="red"
+                    icon={<DeleteIcon />}
+                    onClick={() => handleDeleteCard(_id)}
+                  />
+                </Box>
               </Flex>
             </CardHeader>
             <Divider />
             <CardBody>
               <Editable
-                defaultValue={back || "No answer yet"}
-                onSubmit={(nextValue) => handleEditCard(_id, nextValue, "back")}
+                defaultValue={back || "[No answer yet]"}
+                onSubmit={(nextValue) => handleEditBack(_id, nextValue)}
               >
-                <EditablePreview />
-                <EditableInput />
+                <EditablePreview
+                  fontSize={"xl"}
+                  overflowWrap={"anywhere"}
+                  width="full"
+                />
+                <EditableInput fontSize={"xl"} />
               </Editable>
             </CardBody>
-            {/* <CardFooter>
-                <Button>View here</Button>
-              </CardFooter> */}
           </Card>
         ))}
         {!id && (
           <Box color={"grey"} textAlign={"center"} mt={16}>
             <Heading>No cards found</Heading>
-            <Text>Maybe time to remember something..?</Text>
           </Box>
         )}
       </Container>
