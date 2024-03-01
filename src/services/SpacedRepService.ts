@@ -34,11 +34,11 @@ class SpacedRepService {
     );
   }
 
-  static async createCard(cardId: string, front: string, back: string) {
+  static async createCard(deckId: string, front: string, back: string) {
     return await requestManager(
       `/spaced-rep/create-card`,
       {
-        cardId,
+        deckId,
         front,
         back,
       },
