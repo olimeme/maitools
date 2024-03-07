@@ -1,13 +1,30 @@
 import { useEffect, useState } from "react";
 import MotionWrapper from "../components/MotionWrapper";
-import { Box, Flex, Heading, Textarea } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Flex,
+  Heading,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Text,
+  Textarea,
+  useToast,
+} from "@chakra-ui/react";
 import MarkdownRenderer from "../components/Markdown/MarkdownRenderer";
 import { markdownPageInitialValue } from "../helpers/markdownPageInitialValue";
 import { getInitialStateFromLocalStorage } from "../helpers/getInitialStateFromLocalStorage";
 import BackButton from "../components/BackButton";
 import { AutoResizeTextarea } from "../components/Markdown/AutoResizeTextarea";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import { exportOptions } from "../data/exportOptions";
+import { MarkdownExportService } from "../services/MarkdownExportService";
 
 const MarkdownPage = () => {
+  const [loading, setLoading] = useState(false);
   const [markdownValue, setMarkdownValue] = useState(
     () =>
       getInitialStateFromLocalStorage(
@@ -15,6 +32,7 @@ const MarkdownPage = () => {
         markdownPageInitialValue
       ) as string
   );
+  const toast = useToast();
 
   useEffect(() => {
     localStorage.setItem("markdownValue", JSON.stringify(markdownValue));
@@ -27,11 +45,58 @@ const MarkdownPage = () => {
     setMarkdownValue(inputValue);
   };
 
+  const handleExport = (value: string) => {
+    setLoading(true);
+    MarkdownExportService.export(markdownValue, value)
+      .then(() => {
+        toast({
+          title: "Exported successfully",
+          status: "success",
+          duration: 3000,
+          position: "bottom-right",
+          isClosable: true,
+        });
+      })
+      .catch(() => {
+        toast({
+          title: "Export failed",
+          status: "error",
+          duration: 3000,
+          position: "bottom-right",
+          isClosable: true,
+        });
+      })
+      .finally(() => setLoading(false));
+  };
+
   return (
     <MotionWrapper>
-      <Flex wrap={"wrap"}>
+      <Menu>
+        <MenuButton
+          disabled={loading}
+          as={Button}
+          rightIcon={<ChevronDownIcon />}
+          variant={"ghost"}
+        >
+          Export as...
+        </MenuButton>
+        <MenuList>
+          {exportOptions.map((item) => (
+            <MenuItem
+              value={item.name}
+              key={item.id}
+              onClick={() => handleExport(item.format)}
+            >
+              {item.icon}
+              <Text ml={2}>{item.name}</Text>
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+      <Flex wrap={"wrap"} mt={4}>
         <Box flex={1}>
           <AutoResizeTextarea
+            isDisabled={loading}
             value={markdownValue}
             onChange={handleInputChange}
             placeholder="Write any markdown text here..."
