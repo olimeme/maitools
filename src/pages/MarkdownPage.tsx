@@ -12,6 +12,7 @@ import {
   MenuList,
   Text,
   Textarea,
+  Tooltip,
   useToast,
 } from "@chakra-ui/react";
 import MarkdownRenderer from "../components/Markdown/MarkdownRenderer";
@@ -22,6 +23,8 @@ import { AutoResizeTextarea } from "../components/Markdown/AutoResizeTextarea";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { exportOptions } from "../data/exportOptions";
 import { MarkdownExportService } from "../services/MarkdownExportService";
+import { CookieManager } from "../helpers/CookieManager";
+import AuthService from "../services/AuthService";
 
 const MarkdownPage = () => {
   const [loading, setLoading] = useState(false);
@@ -57,9 +60,10 @@ const MarkdownPage = () => {
           isClosable: true,
         });
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err);
         toast({
-          title: "Export failed",
+          title: err.response.status === 403 ? "Unauthorized" : err.message,
           status: "error",
           duration: 3000,
           position: "bottom-right",
@@ -72,14 +76,30 @@ const MarkdownPage = () => {
   return (
     <MotionWrapper>
       <Menu>
-        <MenuButton
-          disabled={loading}
-          as={Button}
-          rightIcon={<ChevronDownIcon />}
-          variant={"ghost"}
-        >
-          Export as...
-        </MenuButton>
+        {AuthService.isLoggedIn() === false ? (
+          <Tooltip
+            label={"To use this feature please login"}
+            placement={"bottom-start"}
+          >
+            <MenuButton
+              isDisabled={AuthService.isLoggedIn() === false}
+              as={Button}
+              rightIcon={<ChevronDownIcon />}
+              variant={"ghost"}
+            >
+              Export as...
+            </MenuButton>
+          </Tooltip>
+        ) : (
+          <MenuButton
+            isDisabled={AuthService.isLoggedIn() === false}
+            as={Button}
+            rightIcon={<ChevronDownIcon />}
+            variant={"ghost"}
+          >
+            Export as...
+          </MenuButton>
+        )}
         <MenuList>
           {exportOptions.map((item) => (
             <MenuItem
