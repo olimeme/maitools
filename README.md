@@ -7,7 +7,6 @@
 maitools is a comprehensive academic productivity website that integrates essential tools to enhance your workflow. The featured tools include:
 
 - **Pomodoro Timer:** Boost productivity with the Pomodoro technique.
-- **Whiteboard for Collaboration:** Collaborate in real-time using a digital whiteboard.
 - **Todo List:** Organize tasks and stay on top of your schedule.
 - **Spaced Repetition:** Enhance learning with intelligent repetition.
 - **Markdown Editor:** Write and format notes effortlessly using Markdown.
@@ -21,20 +20,17 @@ maitools is developed using React, TypeScript, and Vite, with Chakra UI componen
    - Customize work and break intervals.
    - Visual and audio cues for effective time management.
 
-2. **Whiteboard for Collaboration:**
-   - *Still in progress*
-
-3. **Todo List:**
+2. **Todo List:**
    - Track task completion and monitor your progress.
 
-4. **Spaced Repetition:**
+3. **Spaced Repetition:**
    - *Still in progress*
 
-5. **Markdown Editor:**
+4. **Markdown Editor:**
    - Write and format notes using Markdown syntax.
    - Live preview for a seamless editing experience.
 
-6. **Kanban Board:**
+5. **Kanban Board:**
    - Organize tasks into customizable boards and columns.
    - Drag-and-drop functionality for effortless task management.
 
@@ -67,6 +63,12 @@ To run maitools locally, follow these steps:
    ```bash
    npm run dev
    ```
+
+## Plans
+I want to create all of the tools that I use the most in my workflow, which are:
+- **Whiteboard** - inspired by [Excalidraw](https://excalidraw.com/)
+- **Note taking app** - absolutely in love with [Obsidian](https://obsidian.md/)
+- **Quick IDE** - for a time when I want to quickly check some code (something like [leetcode playground](https://leetcode.com/playground/))
 
 ## License
 
