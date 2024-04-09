@@ -19,8 +19,8 @@ import {
   VStack,
   useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
-import { Link as ReactRouterLink } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import { useDarkModeChecker } from "../../hooks/useDarkModeChecker";
 import PopoverDeleteButton from "../PopoverDeleteButton";
 import { ISpacedRepetitionDeck } from "../../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
@@ -41,6 +41,8 @@ const SpacedRepDeck = ({
   const { changeColorBasedOnTheme } = useDarkModeChecker();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const { handleEditDeck, handleDeleteDeck } = useSpacedRepContext();
+  const navigate = useNavigate();
+
   return (
     <>
       <Card mt={4} w={"sm"} minH={36} style={style} {...rest}>
@@ -102,23 +104,29 @@ const SpacedRepDeck = ({
               <Button variant={"ghost"}>View deck</Button>
             </Link>
 
-            {item.cards.length === 0 ? (
-              <Tooltip label="Deck is empty!" bg="grey">
-                <Button
-                  rightIcon={<ArrowRightIcon />}
-                  isDisabled={item.cards.length === 0}
-                >
-                  Start session
-                </Button>
-              </Tooltip>
-            ) : (
+            <Tooltip
+              label={
+                item.cards.length === 0
+                  ? "Deck is empty!"
+                  : "Start a study session!"
+              }
+              bg="grey"
+            >
               <Button
                 rightIcon={<ArrowRightIcon />}
                 isDisabled={item.cards.length === 0}
+                onClick={
+                  item.cards.length === 0
+                    ? undefined
+                    : () => {
+                        console.log("Start session");
+                        navigate(`/spaced-repetition/session/${item._id}`);
+                      }
+                }
               >
                 Start session
               </Button>
-            )}
+            </Tooltip>
           </ButtonGroup>
         </CardFooter>
       </Card>
