@@ -9,6 +9,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import SpacedRepPage from "../pages/SpacedRepPage";
 import DeckPage from "../components/SpacedRep/DeckPage";
+import SpaceRepSession from "../components/SpacedRep/SpaceRepSession";
 
 export const public_route_group = [
   { path: "/markdown", element: <MarkdownPage /> },
@@ -20,6 +21,7 @@ export const public_route_group = [
   { path: "/register", element: <RegisterPage /> },
   { path: "/spaced-repetition", element: <SpacedRepPage /> },
   { path: "/spaced-repetition/:id", element: <DeckPage /> },
+  { path: "/spaced-repetition/session/:id", element: <SpaceRepSession /> },
   { path: "/", element: <LandingPage /> },
 ];
 

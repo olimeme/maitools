@@ -49,7 +49,6 @@ const DeckPage = ({}: DeckPageProps) => {
   const [inputCardName, setInputCardName] = useState<string>("");
   const [inputCardAnswer, setInputCardAnswer] = useState<string>("");
   const { id } = useParams<{ id: string }>();
-  const { registerAction } = useCommandHistory();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const toast = useToast();
