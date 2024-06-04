@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import MotionWrapper from "../MotionWrapper";
 
-const SpaceRepSession = () => {
+const Session = () => {
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
     if (!id) return;
@@ -11,9 +11,9 @@ const SpaceRepSession = () => {
   }, []);
   return (
     <MotionWrapper>
-      <Heading>Space Rep Session</Heading>
+      <Heading>Session id: {id}</Heading>
     </MotionWrapper>
   );
 };
 
-export default SpaceRepSession;
+export default Session;
