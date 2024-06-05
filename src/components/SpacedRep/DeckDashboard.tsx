@@ -15,7 +15,7 @@ import GalleryView from "./GalleryView";
 import ListView from "./ListView";
 import MotionWrapper from "../MotionWrapper";
 import { ISpacedRepetitionDeck } from "../../interfaces/SpacedRepetition/ISpacedRepetitionDeck";
-import DashboardLoading from "./DashboardLoading";
+import LoadingPage from "../LoadingPage";
 import DashboardNoDecks from "./DashboardNoDecks";
 
 interface DeckDashboardProps {
@@ -25,7 +25,7 @@ interface DeckDashboardProps {
 }
 
 const DeckDashboard = ({ cards, view, loading }: DeckDashboardProps) => {
-  if (loading && cards.length === 0) return <DashboardLoading />;
+  if (loading && cards.length === 0) return <LoadingPage />;
   else if (cards.length === 0) return <DashboardNoDecks />;
   else
     return (
