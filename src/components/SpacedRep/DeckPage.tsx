@@ -38,7 +38,7 @@ import { ISpacedRepetitionCard } from "../../interfaces/SpacedRepetition";
 import { AddIcon, DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import useCommandHistory from "../../hooks/useCommandHistory";
 import SpacedRepService from "../../services/SpacedRepService";
-import DashboardLoading from "./DashboardLoading";
+import LoadingPage from "../LoadingPage";
 
 export interface DeckPageProps {}
 
@@ -220,7 +220,7 @@ const DeckPage = ({}: DeckPageProps) => {
       });
   };
 
-  if (pageLoading) return <DashboardLoading />;
+  if (pageLoading) return <LoadingPage />;
 
   return (
     <MotionWrapper>
