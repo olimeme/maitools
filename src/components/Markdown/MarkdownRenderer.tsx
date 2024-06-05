@@ -4,7 +4,7 @@ import ChakraUIRenderer from "../../helpers/chakraUIRenderer";
 import rehypeRaw from "rehype-raw";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSanitize from "rehype-sanitize";
-import remarkToc from "remark-toc";
+// import remarkToc from "remark-toc";
 
 import { Code, Text, useColorMode } from "@chakra-ui/react";
 
@@ -42,7 +42,10 @@ const MarkdownRenderer = ({ markdownValue }: MarkdownRendererProps) => {
 
   return (
     <ReactMarkdown
-      remarkPlugins={[remarkGfm, remarkToc]}
+      remarkPlugins={[
+        remarkGfm,
+        // remarkToc
+      ]}
       rehypePlugins={[rehypeRaw, rehypeHighlight, rehypeSanitize]}
       components={ChakraUIRenderer(codeChakraUIElementRenderer)}
       children={markdownValue}
