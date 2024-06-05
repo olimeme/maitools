@@ -39,7 +39,7 @@ const Session = () => {
         minH={"80vh"}
       >
         <VStack>
-          <Heading>{cards.toString()}</Heading>
+          <Heading>Session</Heading>
           <BackButton to="/spaced-repetition" />
         </VStack>
       </Box>
