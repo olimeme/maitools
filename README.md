@@ -1,4 +1,4 @@
-# maitools
+# maitools (RELEASE BRANCH)
 
 > All essential academic productivity tools
 
@@ -73,4 +73,3 @@ I want to create all of the tools that I use the most in my workflow, which are:
 ## License
 
 Maitools is licensed under the [MIT License](LICENSE.md). Feel free to use, modify, and distribute the code as per the terms of the license.
-
