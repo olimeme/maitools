@@ -1,4 +1,4 @@
-# maitools (DEVELOPMENT BRANCH)
+# maitools
 
 > All essential academic productivity tools
 
