@@ -1,15 +1,21 @@
 import { Box, Center, Heading, VStack } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { motion } from "framer-motion";
 import MotionWrapper from "../MotionWrapper";
 import LoadingPage from "../LoadingPage";
 import ErrorPage from "../ErrorPage";
 import SpacedRepService from "../../services/SpacedRepService";
 import BackButton from "../BackButton";
+import { withClick } from "./withClick";
+import CardComponent from "./Card";
+
+const Card = withClick(CardComponent);
 
 const Session = () => {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [revealed, setRevealed] = useState(false);
   const [cards, setCards] = useState([] as any[]); // [front, back, id
   const { id } = useParams<{ id: string }>();
   useEffect(() => {
@@ -26,6 +32,10 @@ const Session = () => {
       .finally(() => setLoading(false));
   }, []);
 
+  function onClickHandler() {
+    setRevealed(!revealed);
+  }
+
   if (loading) return <LoadingPage />;
 
   if (errorMessage) return <ErrorPage message={errorMessage} />;
@@ -39,7 +49,7 @@ const Session = () => {
         minH={"80vh"}
       >
         <VStack>
-          <Heading>{cards.toString()}</Heading>
+          <Card width="500px" height="300px" />
           <BackButton to="/spaced-repetition" />
         </VStack>
       </Box>
