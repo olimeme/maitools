@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import { motion, useSpring } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
+import { border, ChakraStyledOptions } from "@chakra-ui/react";
 
 // Learn more: https://www.framer.com/docs/guides/overrides/
 
@@ -19,7 +20,9 @@ const spring = {
  * @framerSupportedLayoutHeight fixed
  */
 
-export function withClick<P>(Component: ComponentType<P>): ComponentType<P> {
+export function withClick<P extends { width: string; height: string }>(
+  Component: ComponentType<P>
+) {
   return (props: P) => {
     const [isFlipped, setIsFlipped] = useState(false);
 
@@ -31,10 +34,12 @@ export function withClick<P>(Component: ComponentType<P>): ComponentType<P> {
     const [rotateYaxis, setRotateYaxis] = useState(0);
     const ref = useRef(null);
 
-    const handleMouseMove = (event: MouseEvent) => {
+    const handleMouseMove: React.MouseEventHandler<HTMLDivElement> = (
+      event
+    ) => {
       const element = ref.current;
       if (!element) return;
-      const elementRect = element.getBoundingClientRect();
+      const elementRect = (element as HTMLElement).getBoundingClientRect();
       const elementWidth = elementRect.width;
       const elementHeight = elementRect.height;
       const elementCenterX = elementWidth / 2;

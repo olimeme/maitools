@@ -1,23 +1,20 @@
-import { Heading } from "@chakra-ui/react";
+import { Box, ChakraStyledOptions, Heading } from "@chakra-ui/react";
 
-interface CardComponentProps {
-  variant: "Front" | "Back";
-  style?: React.CSSProperties;
+export interface CardComponentProps extends ChakraStyledOptions {
+  variant?: "Front" | "Back";
 }
 
-const CardComponent = ({ variant, style }: CardComponentProps) => {
+const CardComponent = ({ variant, style, ...rest }: CardComponentProps) => {
   return (
-    <div
-      style={{
-        ...style,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        background: variant === "Front" ? "lightblue" : "lightcoral",
-      }}
+    <Box
+      display={"flex"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      backgroundColor={variant === "Front" ? "cyan.600" : "pink.200"}
+      {...rest}
     >
       {variant === "Front" ? "Front Side" : "Back Side"}
-    </div>
+    </Box>
   );
 };
 

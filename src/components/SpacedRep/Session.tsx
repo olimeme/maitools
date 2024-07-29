@@ -8,9 +8,11 @@ import ErrorPage from "../ErrorPage";
 import SpacedRepService from "../../services/SpacedRepService";
 import BackButton from "../BackButton";
 import { withClick } from "./withClick";
-import CardComponent from "./Card";
+import CardComponent, { CardComponentProps } from "./Card";
 
-const Card = withClick(CardComponent);
+const Card = withClick<CardComponentProps & { width: string; height: string }>(
+  CardComponent
+);
 
 const Session = () => {
   const [loading, setLoading] = useState(true);
@@ -49,7 +51,7 @@ const Session = () => {
         minH={"80vh"}
       >
         <VStack>
-          <Card width="500px" height="300px" />
+          <Card width="700px" height="400px" borderRadius={"xl"} />
           <BackButton to="/spaced-repetition" />
         </VStack>
       </Box>
