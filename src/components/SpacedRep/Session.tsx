@@ -17,25 +17,32 @@ const Card = withClick<CardComponentProps & { width: string; height: string }>(
 const Session = () => {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-  const [revealed, setRevealed] = useState(false);
   const [cards, setCards] = useState([] as any[]); // [front, back, id
   const { id } = useParams<{ id: string }>();
+  const { front, back } = getRandomCard();
+
   useEffect(() => {
     if (!id) return;
+    setLoading(true);
+    fetchCards(id);
+  }, []);
+
+  function fetchCards(id: string) {
     setLoading(true);
     SpacedRepService.getAllCards(id)
       .then((res) => {
         setCards(res.cards);
-        console.log(res.cards);
       })
       .catch((err) => {
         setErrorMessage(err.message);
       })
       .finally(() => setLoading(false));
-  }, []);
+  }
 
-  function onClickHandler() {
-    setRevealed(!revealed);
+  function getRandomCard() {
+    if (cards.length === 0) return { front: "", back: "" };
+    const card = cards[Math.floor(Math.random() * cards.length)];
+    return { front: card.front, back: card.back };
   }
 
   if (loading) return <LoadingPage />;
@@ -51,7 +58,13 @@ const Session = () => {
         minH={"80vh"}
       >
         <VStack>
-          <Card width="700px" height="400px" borderRadius={"xl"} />
+          <Card
+            width="700px"
+            height="400px"
+            borderRadius={"xl"}
+            front={front}
+            back={back}
+          />
           <BackButton to="/spaced-repetition" />
         </VStack>
       </Box>
