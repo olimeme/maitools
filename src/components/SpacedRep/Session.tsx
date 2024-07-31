@@ -18,7 +18,6 @@ const Session = () => {
     SpacedRepService.getAllCards(id)
       .then((res) => {
         setCards(res.cards);
-        console.log(res.cards);
       })
       .catch((err) => {
         setErrorMessage(err.message);

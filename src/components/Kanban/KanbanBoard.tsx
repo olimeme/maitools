@@ -91,7 +91,6 @@ const KanbanBoard = () => {
     const [[columnId, { name, items }]] = column;
     items.push({ id: uuidv4(), text: "New item" });
     const newColumns = { ...columns, [columnId]: { name, items } };
-    console.log(newColumns);
     setFocusCardOnMount(true);
     setColumns(newColumns);
   };

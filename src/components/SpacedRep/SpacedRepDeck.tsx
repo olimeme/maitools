@@ -118,10 +118,7 @@ const SpacedRepDeck = ({
                 onClick={
                   item.cards.length === 0
                     ? undefined
-                    : () => {
-                        console.log("Start session");
-                        navigate(`/spaced-repetition/session/${item._id}`);
-                      }
+                    : () => navigate(`/spaced-repetition/session/${item._id}`)
                 }
               >
                 Start session
