@@ -42,7 +42,6 @@ const ContextMenu = ({ menuItems }: ContextMenuProps) => {
                 x: e.pageX,
                 y: e.pageY,
               });
-              console.log("Right Click", e.pageX, e.pageY);
             }}
           >
             {item.text}

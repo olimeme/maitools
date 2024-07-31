@@ -38,7 +38,7 @@ class AuthService {
 
   static async register(data: LoginData) {
     try {
-      const response = await axios.post(`/register`, data);
+      const response = await authAxios.post(`/register`, data);
       if (response.status === 200) {
         this.setToken(response.data.accessToken);
         this.setCredentials(response.data.user);
